@@ -83,7 +83,7 @@
     "Archive": "Archive",
     "Are you sure you want to delete # items?": "Are you sure you want to delete {count} item?|Are you sure you want to delete {count} items?",
     "Are you sure you want to delete “{title}”?": "Are you sure you want to delete “{title}”?",
-    "Are you sure you want to duplicate # items?": "Are you sure you want to duplicate # items?",
+    "Are you sure you want to duplicate # items?": "Are you sure you want to duplicate 1 item?|Are you sure you want to duplicate {count} items?",
 =======
     "A decryption key is required.": "A decryption key is required.",
     "A fresh verification link has been sent to your email address.": "A fresh verification link has been sent to your email address.",
