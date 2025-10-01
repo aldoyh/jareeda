@@ -107,7 +107,10 @@
                 :uppy="uppy"
             />
             <div :class="{ 'filemanager-view-list': view === 'list' }" class="filemanager-list" @click="checkNone()">
+<<<<<<< Updated upstream
                 <p class="my-3 text-muted" v-if="filteredItems.length === 0">{{ t('The folder is empty.') }}</p>
+=======
+>>>>>>> Stashed changes
                 <div
                     v-for="item in filteredItems"
                     :key="item.id"
@@ -155,6 +158,7 @@
 </template>
 
 <script setup>
+<<<<<<< Updated upstream
 import Compressor from '@uppy/compressor';
 import Uppy from '@uppy/core';
 import '@uppy/core/css/style.min.css';
@@ -167,6 +171,18 @@ import es from '@uppy/locales/lib/es_ES';
 import fr from '@uppy/locales/lib/fr_FR';
 import nl from '@uppy/locales/lib/nl_NL';
 import Dashboard from '@uppy/vue/dashboard';
+=======
+import Uppy from '@uppy/core';
+import '@uppy/core/dist/style.css';
+import '@uppy/dashboard/dist/style.css';
+import DropTarget from '@uppy/drop-target';
+import ImageEditor from '@uppy/image-editor';
+import '@uppy/image-editor/dist/style.min.css';
+import es from '@uppy/locales/lib/es_ES';
+import fr from '@uppy/locales/lib/fr_FR';
+import nl from '@uppy/locales/lib/nl_NL';
+import { Dashboard } from '@uppy/vue';
+>>>>>>> Stashed changes
 import XHRUpload from '@uppy/xhr-upload';
 import { ArrowLeftIcon, CloudUploadIcon, FileIcon, FileMusicIcon, FileVideo2Icon, FolderIcon, FolderPlusIcon, LayoutGridIcon, LayoutListIcon } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
@@ -175,7 +191,11 @@ import { useI18n } from 'vue-i18n';
 import fetcher from '../admin/fetcher';
 
 const { t } = useI18n();
+<<<<<<< Updated upstream
 const uppyLocales = { ar, fr, nl, es };
+=======
+const uppyLocales = { fr, nl, es };
+>>>>>>> Stashed changes
 
 const props = defineProps({
     multiple: {
@@ -207,7 +227,10 @@ const selectedItems = ref([]);
 const deleteLimit = ref(100);
 const urlBase = ref('/api/files');
 const maxFilesize = ref(window.TypiCMS.max_file_upload_size);
+<<<<<<< Updated upstream
 const compressorJsConfiguration = ref(window.TypiCMS.compressor_js_configuration);
+=======
+>>>>>>> Stashed changes
 const folder = ref({ id: '' });
 const data = ref({ models: [], path: [] });
 
@@ -246,7 +269,10 @@ const uppy = computed(() => {
             ],
         },
     })
+<<<<<<< Updated upstream
         .use(Compressor, compressorJsConfiguration.value)
+=======
+>>>>>>> Stashed changes
         .use(DropTarget, {
             target: document.body,
         })

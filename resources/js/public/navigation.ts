@@ -1,4 +1,5 @@
 export default (): void => {
+<<<<<<< Updated upstream
     const button = document.getElementById('menu-button');
     if (!button) {
         return;
@@ -8,5 +9,12 @@ export default (): void => {
         const target = event.target as HTMLElement;
         target.classList.toggle('hamburger-open');
         event.preventDefault();
+=======
+    const button: HTMLButtonElement = document.getElementById('menu-button') as HTMLButtonElement;
+    button.addEventListener('click', function (event: any) {
+        event.target.classList.toggle('hamburger-open');
+        event.preventDefault();
+        return false;
+>>>>>>> Stashed changes
     });
 };

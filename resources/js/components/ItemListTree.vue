@@ -12,6 +12,7 @@
         <div :class="{ 'item-list-content': !subList }">
             <div :class="{ header: !subList }" class="item-list-header">
                 <div class="btn-toolbar item-list-toolbar header-toolbar">
+<<<<<<< Updated upstream
                     <item-list-actions
                         v-if="$can('update ' + table) || $can('delete ' + table)"
                         :deletable="true"
@@ -24,6 +25,8 @@
                         @publish="publish"
                         @unpublish="unpublish"
                     ></item-list-actions>
+=======
+>>>>>>> Stashed changes
                     <slot name="buttons"></slot>
                     <div class="d-flex align-items-center">
                         <div v-if="loading" class="spinner-border spinner-border-sm text-dark" role="status">
@@ -46,6 +49,7 @@
                 </div>
             </div>
             <div class="content">
+<<<<<<< Updated upstream
                 <sl-vue-tree-next ref="slVueTree" v-model="models" @drop="drop" @toggle="toggle">
                     <template #title="{ node }">
                         <input
@@ -56,6 +60,13 @@
                             @change="toggleCheck(node)"
                             @click="captureModifierKeys($event)"
                         />
+=======
+                <sl-vue-tree-next ref="slVueTree" v-model="models" :allowMultiselect="false" @drop="drop" @toggle="toggle">
+                    <template #title="{ node }">
+                        <button v-if="$can('delete ' + table)" class="btn btn-xs btn-link" type="button" @click="deleteFromNested(node)">
+                            <x-icon class="text-danger" :size="18" stroke-width="2" />
+                        </button>
+>>>>>>> Stashed changes
 
                         <a v-if="$can('update ' + table)" :href="table + '/' + node.data.id + '/edit'" class="btn btn-light btn-xs me-2 ms-1">
                             {{ t('Edit') }}
@@ -67,7 +78,11 @@
                         </button>
                         <house-icon v-if="node.data.is_home" class="text-secondary" size="16" />
                         <lock-icon v-if="node.data.private" class="text-secondary" size="16" />
+<<<<<<< Updated upstream
                         <div class="title">{{ translatable ? node.data.title_translated : node.data.title }}</div>
+=======
+                        <div class="title" v-html="translatable ? node.data.title_translated : node.data.title"></div>
+>>>>>>> Stashed changes
                         <corner-right-down-icon v-if="node.data.redirect" class="text-secondary" size="16" />
 
                         <a v-if="node.data.module" :href="'/admin/' + node.data.module" class="btn btn-xs btn-secondary fw-bold px-1 py-0">
@@ -76,6 +91,7 @@
                     </template>
 
                     <template #toggle="{ node }">
+<<<<<<< Updated upstream
                         <button
                             v-if="node.children.length > 0"
                             type="button"
@@ -88,6 +104,11 @@
                             <chevron-right-icon v-else size="18" />
                         </button>
                         <span v-else class="tree-toggle-placeholder" />
+=======
+                        <chevron-down-icon v-if="node.children.length > 0 && node.isExpanded" size="16" />
+                        <chevron-right-icon v-if="node.children.length > 0 && !node.isExpanded" size="16" />
+                        <small v-else />
+>>>>>>> Stashed changes
                     </template>
                 </sl-vue-tree-next>
             </div>
@@ -97,15 +118,22 @@
 
 <script setup>
 import alertify from 'alertify.js';
+<<<<<<< Updated upstream
 import { ChevronDownIcon, ChevronRightIcon, CornerRightDownIcon, HouseIcon, LockIcon } from 'lucide-vue-next';
+=======
+import { ChevronDownIcon, ChevronRightIcon, CornerRightDownIcon, HouseIcon, LockIcon, XIcon } from 'lucide-vue-next';
+>>>>>>> Stashed changes
 import { SlVueTreeNext } from 'sl-vue-tree-next';
 import { computed, ref, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import fetcher from '../admin/fetcher';
 
+<<<<<<< Updated upstream
 import ItemListActions from './ItemListActions.vue';
 
+=======
+>>>>>>> Stashed changes
 const { t } = useI18n();
 
 const props = defineProps({
@@ -140,9 +168,13 @@ const contentLocale = ref(window.TypiCMS.content_locale);
 const loading = ref(false);
 const models = ref([]);
 const total = ref(null);
+<<<<<<< Updated upstream
 const checkedItems = ref([]);
 const slVueTree = useTemplateRef('slVueTree');
 const lastClickEvent = ref(null);
+=======
+const slVueTree = useTemplateRef('slVueTree');
+>>>>>>> Stashed changes
 
 const url = computed(() => {
     const query = ['fields[' + props.table + ']=' + props.fields];
@@ -154,6 +186,7 @@ const url = computed(() => {
     return props.urlBase + '?' + query.join('&');
 });
 
+<<<<<<< Updated upstream
 const flattenedModels = computed(() => {
     const flattened = [];
     function flatten(nodes) {
@@ -186,6 +219,10 @@ function checkNone() {
     checkedItems.value = [];
 }
 
+=======
+fetchData();
+
+>>>>>>> Stashed changes
 async function fetchData() {
     startLoading();
     try {
@@ -230,6 +267,7 @@ async function switchLocale(locale) {
     }
 }
 
+<<<<<<< Updated upstream
 async function destroy() {
     const deleteLimit = 100;
 
@@ -245,11 +283,21 @@ async function destroy() {
         !window.confirm(
             t('Are you sure you want to delete # items?', numberOfCheckedModels.value, {
                 count: numberOfCheckedModels.value,
+=======
+async function deleteFromNested(node) {
+    const model = node.data;
+    const title = model.title_translated;
+    if (
+        !window.confirm(
+            t('Are you sure you want to delete “{title}”?', {
+                title,
+>>>>>>> Stashed changes
             }),
         )
     ) {
         return false;
     }
+<<<<<<< Updated upstream
 
     startLoading();
 
@@ -368,6 +416,22 @@ async function setStatus(status) {
     stopLoading();
     checkNone();
     await fetchData();
+=======
+    try {
+        const response = await fetcher(props.urlBase + '/' + model.id, {
+            method: 'DELETE',
+        });
+        if (!response.ok) {
+            const responseData = await response.json();
+            throw new Error(responseData.message);
+        }
+        slVueTree.value.remove([node.path]);
+        alertify.success(t('Item successfully deleted.'));
+    } catch (error) {
+        console.log(error);
+        alertify.error(t(error.message) || t('Sorry, an error occurred.'));
+    }
+>>>>>>> Stashed changes
 }
 
 async function drop(draggingNodes, position) {
@@ -417,6 +481,7 @@ async function drop(draggingNodes, position) {
     }
 }
 
+<<<<<<< Updated upstream
 async function toggle(node, event) {
     const data = {};
     data[props.title.toLowerCase() + '_' + node.data.id + '_collapsed'] = node.isExpanded;
@@ -435,6 +500,11 @@ async function toggle(node, event) {
         });
     }
 
+=======
+async function toggle(node) {
+    const data = {};
+    data[props.title + '_' + node.data.id + '_collapsed'] = node.isExpanded;
+>>>>>>> Stashed changes
     try {
         const response = await fetcher('/api/users/current/update-preferences', {
             method: 'POST',
@@ -444,11 +514,16 @@ async function toggle(node, event) {
             const responseData = await response.json();
             throw new Error(responseData.message);
         }
+<<<<<<< Updated upstream
     } catch (error) {
+=======
+    } catch {
+>>>>>>> Stashed changes
         alertify.error(t('User preferences couldn’t be set.'));
     }
 }
 
+<<<<<<< Updated upstream
 function toggleCheck(node) {
     const model = node.data;
     const index = checkedItems.value.findIndex((item) => item.id === model.id);
@@ -499,6 +574,8 @@ function toggleCheck(node) {
     }
 }
 
+=======
+>>>>>>> Stashed changes
 async function toggleStatus(node) {
     const originalNode = JSON.parse(JSON.stringify(node)),
         status = props.translatable ? parseInt(node.data.status_translated) : parseInt(node.data.status) || 0,

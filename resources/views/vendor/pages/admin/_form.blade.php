@@ -82,7 +82,11 @@
         <div class="col-lg-4">
             <div class="right-column">
                 @if ($model->redirect !== 1)
+<<<<<<< Updated upstream
                     <file-manager></file-manager>
+=======
+                    <file-manager related-table="{{ $model->getTable() }}" :related-id="{{ $model->id ?? 0 }}"></file-manager>
+>>>>>>> Stashed changes
                     <file-field type="image" field="image_id" :init-file="{{ $model->image ?? 'null' }}"></file-field>
                     <file-field type="image" field="og_image_id" :init-file="{{ $model->ogImage ?? 'null' }}" label="Open Graph image"></file-field>
                     <files-field :init-files="{{ $model->files }}"></files-field>

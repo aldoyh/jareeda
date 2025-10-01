@@ -1,7 +1,10 @@
 @extends('pages::public.master')
 
+<<<<<<< Updated upstream
 @section('canonical', url()->full())
 
+=======
+>>>>>>> Stashed changes
 @section('bodyClass', 'body-search body-search-index body-page body-page-' . $page->id)
 
 @section('page')

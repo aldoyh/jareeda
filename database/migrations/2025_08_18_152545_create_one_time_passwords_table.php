@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+
+    public function up(): void
+    {
+        Schema::create('one_time_passwords', function (Blueprint $table) {
+            $table->id();
+
+            $table->string('password');
+            $table->json('origin_properties')->nullable();
+
+            $table->dateTime('expires_at');
+            $table->morphs('authenticatable', 'typicms_otp_authenticatable_type_authenticatable_id_index');
+
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::drop('one_time_passwords');
+    }
+};

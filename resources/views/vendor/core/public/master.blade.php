@@ -16,8 +16,11 @@
     <meta property="og:image" content="@yield('ogImage')" />
     <meta name="twitter:card" content="summary_large_image" />
 
+<<<<<<< Updated upstream
     <link rel="canonical" href="@yield('canonical', url()->current())">
 
+=======
+>>>>>>> Stashed changes
     @vite('resources/scss/public.scss')
 
     @include('core::public._feed-links')

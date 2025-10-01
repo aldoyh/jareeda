@@ -20,7 +20,11 @@
                 {!! TranslatableBootForm::checkbox(__('Published'), 'status') !!}
             </div>
             {!! TranslatableBootForm::textarea(__('Description'), 'description')->rows(3) !!}
+<<<<<<< Updated upstream
             <file-manager></file-manager>
+=======
+            <file-manager related-table="{{ $model->getTable() }}" :related-id="{{ $model->id ?? 0 }}"></file-manager>
+>>>>>>> Stashed changes
             <file-field type="image" field="image_id" :init-file="{{ $model->image ?? 'null' }}"></file-field>
         </div>
 
