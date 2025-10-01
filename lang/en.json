@@ -14,8 +14,7 @@
     "# items published": "1 item published|{count} items published",
     "# items selected": "No items selected|1 item selected|{count} items selected",
     "# items unpublished": "1 item unpublished|{count} items unpublished",
-<<<<<<< Updated upstream
-    "# menulinks": "# menulinks",
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     "# menus": "No menus|1 menu|{count} menus",
@@ -24,8 +23,7 @@
     "# partners": "No partners|1 partner|{count} partners",
     "# places": "No addresses|1 address|{count} addresses",
     "# projects": "No projects|1 project|{count} projects",
-<<<<<<< Updated upstream
-    "# registrations": "# registrations",
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     "# roles": "No roles|1 role|{count} roles",
@@ -513,10 +511,10 @@
     "Mobile": "Mobile",
     "Modify": "Modify",
     "Module": "Module",
-    "Module name": "Module name",
-    "Modules permissions": "Modules permissions",
-    "Month": "Month",
-    "Move to parent folder": "Move to parent folder",
+    "Module name": "اسم الوحدة",
+    "Modules permissions": "صلاحيات الوحدات",
+    "Month": "شهر",
+    "Move to parent folder": "نقل إلى المجلد الأصل",
     "Moved Permanently": "Moved Permanently",
     "Mr": "Mr",
     "Mrs": "Mrs",
