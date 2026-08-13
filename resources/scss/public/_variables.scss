@@ -1,13 +1,13 @@
 $white: #fff;
-$gray-100: #f8f9fa;
-$gray-200: #e9ecef;
-$gray-300: #dee2e6;
-$gray-400: #ced4da;
-$gray-500: #adb5bd;
-$gray-600: #6c757d;
-$gray-700: #495057;
-$gray-800: #343a40;
-$gray-900: #212529;
+$gray-100: #f8fafc;
+$gray-200: #eef2f7;
+$gray-300: #e2e8f0;
+$gray-400: #cbd5e1;
+$gray-500: #94a3b8;
+$gray-600: #64748b;
+$gray-700: #475569;
+$gray-800: #334155;
+$gray-900: #1e293b;
 $black: #000;
 
 $blue: #0d6efd;
@@ -21,7 +21,9 @@ $green: #198754;
 $teal: #20c997;
 $cyan: #0dcaf0;
 
-$primary: $blue;
+$primary: #4f46e5;
+$primary-600: #4338ca;
+$primary-700: #3730a3;
 $secondary: $gray-600;
 $success: $green;
 $info: $cyan;
@@ -33,49 +35,70 @@ $dark: $gray-900;
 $min-contrast-ratio: 4.5;
 
 $body-bg: $white;
-$body-color: $gray-900;
+$body-color: $gray-800;
 $link-color: $primary;
+$link-hover-color: $primary-600;
 
 $font-family-sans-serif:
-    system-ui,
     -apple-system,
+    BlinkMacSystemFont,
+    'Inter',
     'Segoe UI',
     Roboto,
     'Helvetica Neue',
     Arial,
     'Noto Sans',
-    'Liberation Sans',
     sans-serif,
     'Apple Color Emoji',
     'Segoe UI Emoji',
     'Segoe UI Symbol',
     'Noto Color Emoji';
 
-$font-size-base: 1.125rem;
+$font-size-base: 1.0625rem;
+$line-height-base: 1.7;
 
 $paragraph-margin-bottom: 1.5rem;
 $headings-margin-bottom: $paragraph-margin-bottom;
+$headings-font-weight: 700;
+$headings-line-height: 1.25;
+$headings-color: $gray-900;
 
-$h1-font-size: $font-size-base * 2;
+$h1-font-size: $font-size-base * 2.25;
 $h2-font-size: $font-size-base * 1.75;
-$h3-font-size: $font-size-base * 1.25;
+$h3-font-size: $font-size-base * 1.375;
 $h4-font-size: $font-size-base * 1.125;
 $h5-font-size: $font-size-base;
-$h6-font-size: $font-size-base * 0.85;
+$h6-font-size: $font-size-base * 0.875;
 
 $grid-gutter-width: 1.5rem;
 
 $container-padding-x: $grid-gutter-width;
 
-$border-radius: 0.5rem;
-$border-radius-sm: 0.25rem;
+$border-radius: 0.625rem;
+$border-radius-sm: 0.375rem;
 $border-radius-lg: 1rem;
+$border-radius-pill: 50rem;
+
+$link-decoration: none;
+$link-shade-percentage: 20%;
 
 $pagination-padding-x: 0;
 $pagination-padding-y: 0;
 $pagination-bg: transparent;
 $pagination-border-width: 0;
 $pagination-hover-bg: $gray-300;
-$pagination-active-bg: $secondary;
+$pagination-hover-color: $primary;
+$pagination-active-bg: $primary;
+$pagination-active-color: $white;
 $pagination-disabled-bg: transparent;
 $pagination-disabled-color: $gray-400;
+$pagination-focus-box-shadow: none;
+
+$focus-ring-width: 0.25rem;
+$focus-ring-color: rgba($primary, 0.25);
+
+// Footer palette — dark slate footer
+$footer-bg: #0f172a;
+$footer-text: #cbd5e1;
+$footer-text-muted: #7c8aa5;
+$footer-link-hover: #fff;

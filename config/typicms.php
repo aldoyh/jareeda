@@ -41,8 +41,7 @@ return [
     */
     'locales' => [
         'en' => 'en_US',
-        'fr' => 'fr_FR',
-        'nl' => 'nl_NL',
+        'ar' => 'ar_SA',
     ],
 
     /*

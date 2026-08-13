@@ -6,14 +6,34 @@
         @extend .btn-link;
         padding: 0.5rem 1rem;
         line-height: 1.375;
-        border: none;
+        border: 1px solid transparent;
+        border-radius: $border-radius-pill;
         text-transform: uppercase;
-        font-weight: normal;
+        font-weight: 600;
+        font-size: $font-size-sm;
+        color: $body-color;
         width: 4rem;
+        transition:
+            color 0.15s ease,
+            background-color 0.15s ease,
+            border-color 0.15s ease;
+        &:hover {
+            color: $primary;
+            background-color: rgba($primary, 0.08);
+            border-color: transparent;
+        }
     }
     &-list {
         min-width: 0;
         width: 4rem;
+        border-radius: $border-radius;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+        padding: 0.25rem;
+        .lang-switcher-item {
+            border-radius: $border-radius-sm;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+        }
     }
     &-item {
         padding: 0.5rem 1rem;

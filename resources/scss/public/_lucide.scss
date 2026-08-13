@@ -1,10 +1,6 @@
 @font-face {
     font-family: 'lucide';
-<<<<<<< Updated upstream
     src: url('../../fonts/lucide-subset.woff2?t=1751036098915') format('woff2');
-=======
-    src: url('../fonts/lucide-subset.woff2?t=1751036098915') format('woff2');
->>>>>>> Stashed changes
 }
 
 [class^='icon-'],
@@ -120,12 +116,9 @@
 .icon-menu::before {
     content: '\e119';
 }
-<<<<<<< Updated upstream
 .icon-arrow-up::before {
     content: '\e04e';
 }
-=======
->>>>>>> Stashed changes
 
 $icon-house: '\e0f9';
 $icon-user: '\e19f';
@@ -162,7 +155,4 @@ $icon-chevron-left: '\e072';
 $icon-chevron-up: '\e074';
 $icon-users: '\e1a4';
 $icon-menu: '\e119';
-<<<<<<< Updated upstream
 $icon-arrow-up: '\e04e';
-=======
->>>>>>> Stashed changes

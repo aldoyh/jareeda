@@ -2,13 +2,27 @@
     &-list {
         @extend .nav;
         @extend .nav-pills;
+        gap: 0.25rem;
     }
     &-item {
         @extend .nav-item;
     }
     &-link {
         @extend .nav-link;
-    }
-    &-item.active &-link {
+        color: $footer-text;
+        font-weight: 500;
+        padding: 0.375rem 0.75rem;
+        border-radius: $border-radius-pill;
+        transition:
+            color 0.15s ease,
+            background-color 0.15s ease;
+        &:hover {
+            color: $footer-link-hover;
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+        &.active {
+            color: $footer-link-hover;
+            background-color: rgba(255, 255, 255, 0.12);
+        }
     }
 }

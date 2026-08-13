@@ -214,4 +214,18 @@ return [
 
     'partitioned' => env('SESSION_PARTITIONED_COOKIE', false),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Session Serialization
+    |--------------------------------------------------------------------------
+    |
+    | Keep PHP serialization so existing sessions stay valid through the
+    | Laravel 13 upgrade. Switch to "json" after users can re-authenticate.
+    |
+    | Supported: "json", "php"
+    |
+    */
+
+    'serialization' => 'php',
+
 ];

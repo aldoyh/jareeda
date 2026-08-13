@@ -1,42 +1,111 @@
 $bootstrap-icons-font-dir: 'bootstrap-icons/font/fonts';
 
+// Neutrals — a refined slate scale
 $white: #fff;
-$gray-100: #f8f9fa;
-$gray-200: #e9ecef;
-$gray-300: #dee2e6;
-$gray-400: #ced4da;
-$gray-500: #adb5bd;
-$gray-600: #6c757d;
-$gray-700: #495057;
-$gray-800: #343a40;
-$gray-900: #212529;
+$gray-100: #f8fafc;
+$gray-200: #eef2f7;
+$gray-300: #e2e8f0;
+$gray-400: #cbd5e1;
+$gray-500: #94a3b8;
+$gray-600: #64748b;
+$gray-700: #475569;
+$gray-800: #334155;
+$gray-900: #1e293b;
 $black: #000;
+
+// Brand accent — indigo
+$primary: #4f46e5;
+$primary-600: #4338ca;
+$primary-700: #3730a3;
+$primary-subtle: #e0e7ff;
+
+// Dark sidebar palette
+$sidebar-bg: #0f172a;
+$sidebar-bg-2: #111c34;
+$sidebar-border: rgba(255, 255, 255, 0.07);
+$sidebar-text: #cbd5e1;
+$sidebar-text-muted: #64748b;
+$sidebar-heading: #7c8aa5;
+$sidebar-hover-bg: rgba(255, 255, 255, 0.06);
+$sidebar-active-bg: rgba(79, 70, 229, 0.9);
+$sidebar-active-text: #fff;
 
 $light: $gray-100;
 $secondary: $gray-600;
 $dark: $gray-800;
 
-$font-size-base: 1rem;
+$font-family-sans-serif:
+    -apple-system,
+    BlinkMacSystemFont,
+    'Inter',
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    'Noto Sans',
+    sans-serif,
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    'Noto Color Emoji';
+
+$font-size-base: 0.9375rem;
 $font-size-sm: $font-size-base * 0.875;
 $font-size-lg: $font-size-base * 1.25;
 
-$h1-font-size: $font-size-base * 2.25;
-$h2-font-size: $font-size-base * 1.25;
-$h3-font-size: $font-size-base * 1.125;
+$h1-font-size: $font-size-base * 2.1;
+$h2-font-size: $font-size-base * 1.35;
+$h3-font-size: $font-size-base * 1.15;
 
 $link-decoration: none;
+$link-shade-percentage: 15%;
 
-$border-radius: 0.375rem;
-$border-radius-sm: 0.25rem;
-$border-radius-lg: 0.5rem;
+$border-radius: 0.5rem;
+$border-radius-sm: 0.375rem;
+$border-radius-lg: 0.75rem;
 
 $spacer: 1.25rem;
 
 $modal-content-border-radius: 1rem;
+$modal-content-border-width: 0;
+$modal-content-box-shadow-xs: 0 1rem 3rem rgba($gray-900, 0.16);
 
 $box-shadow-sm: 0 0.5px 1px 1px rgba(0, 0, 0, 0.075);
+$box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 4px 16px rgba(15, 23, 42, 0.06);
+$box-shadow-lg: 0 1rem 3rem rgba(15, 23, 42, 0.14);
+
+$card-border-radius: $modal-content-border-radius;
+$card-border-width: 0;
+$card-spacer-y: 1.25rem;
+$card-spacer-x: 1.25rem;
+$card-cap-bg: var(--bs-body-bg);
 
 $table-group-separator-color: $gray-300;
+$table-cell-padding-y: 0.75rem;
+$table-cell-padding-x: 1rem;
+$table-striped-bg-factor: 0.4;
+$table-hover-bg-factor: 0.06;
+
+$input-bg: var(--bs-body-bg);
+$input-border-color: $gray-300;
+$input-focus-border-color: $primary;
+$input-focus-box-shadow: 0 0 0 0.25rem rgba($primary, 0.12);
+$form-select-focus-border-color: $primary;
+$form-select-focus-box-shadow: 0 0 0 0.25rem rgba($primary, 0.12);
+$input-group-addon-bg: $gray-100;
+
+$btn-focus-box-shadow: 0 0 0 0.25rem rgba($primary, 0.15);
+$btn-active-box-shadow: none;
+
+$nav-link-padding-y: 0.5rem;
+$nav-link-padding-x: 0.75rem;
+
+$dropdown-border-color: rgba(15, 23, 42, 0.08);
+$dropdown-box-shadow: $box-shadow;
+$dropdown-border-radius: 0.75rem;
+$dropdown-item-padding-y: 0.5rem;
+$dropdown-item-padding-x: 1rem;
+$dropdown-link-hover-bg: var(--bs-tertiary-bg);
 
 $enable-validation-icons: false;
 
@@ -45,17 +114,21 @@ $pagination-padding-y: 0;
 $pagination-border-width: 0;
 $pagination-color: var(--bs-body-color);
 $pagination-bg: transparent;
-$pagination-hover-color: var(--bs-body-color);
-$pagination-active-bg: var(--bs-secondary-bg-subtle);
-$pagination-active-color: var(--bs-body-color);
+$pagination-hover-color: var(--bs-primary);
+$pagination-hover-bg: var(--bs-tertiary-bg);
+$pagination-active-bg: var(--bs-primary);
+$pagination-active-color: var(--bs-white);
 $pagination-disabled-bg: transparent;
 $pagination-border-radius: $border-radius-sm;
 $pagination-font-size: $font-size-sm;
 
-$offcanvas-horizontal-width: 260px;
+$badge-font-size: 0.75em;
+$badge-font-weight: 600;
+
+$offcanvas-horizontal-width: 272px;
 $offcanvas-vertical-height: 100vh;
 $offcanvas-transition-duration: 0.3s;
 $offcanvas-border-width: 0;
 
-$card-border-radius: $modal-content-border-radius;
-$card-border-width: 0;
+$focus-ring-width: 0.25rem;
+$focus-ring-color: rgba($primary, 0.25);

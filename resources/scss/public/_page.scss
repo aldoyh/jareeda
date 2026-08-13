@@ -1,5 +1,6 @@
 .page {
     &-header {
+        padding: 3.5rem 0 2rem;
         &-container {
             @extend .container-xl;
         }
@@ -49,6 +50,7 @@
     &-figure {
         &-image {
             @extend .img-fluid;
+            border-radius: $border-radius-lg;
         }
     }
 }

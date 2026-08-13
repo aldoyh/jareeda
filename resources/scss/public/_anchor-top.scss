@@ -17,13 +17,9 @@
         opacity: 0;
     }
     &-button {
-<<<<<<< Updated upstream
         @extend .btn;
         @extend .btn-outline-primary;
         @extend .rounded-pill;
-=======
-        @extend .btn-outline-primary;
->>>>>>> Stashed changes
         width: 100%;
         height: 100%;
         display: flex;

@@ -1,9 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
+use Illuminate\View\FileViewFinder;
+use TypiCMS\Modules\Core\Models\File as FileModel;
 use TypiCMS\Modules\Core\Models\Page;
 
 if (!function_exists('homeUrl')) {
@@ -15,6 +20,26 @@ if (!function_exists('homeUrl')) {
         }
 
         return url($uri);
+    }
+}
+
+if (!function_exists('showAdminButtons')) {
+    function showAdminButtons(): bool
+    {
+        return (bool) auth('web')->user()?->can('see navbar')
+            && !request()->boolean('preview')
+            && !request()->is('*/create-passkey');
+    }
+}
+
+if (!function_exists('imageOrDefault')) {
+    function imageOrDefault(?FileModel $image, ?int $width = null, ?int $height = null): string
+    {
+        if ($image instanceof FileModel) {
+            return $image->render($width, $height);
+        }
+
+        return new FileModel()->render($width, $height);
     }
 }
 
@@ -37,6 +62,18 @@ if (!function_exists('locales')) {
     }
 }
 
+if (!function_exists('adminLocales')) {
+    /** @return array<string> */
+    function adminLocales(): array
+    {
+        if (is_array(config('typicms.admin_locales'))) {
+            return array_keys(config('typicms.admin_locales'));
+        }
+
+        return locales();
+    }
+}
+
 if (!function_exists('enabledLocales')) {
     /** @return array<string> */
     function enabledLocales(): array
@@ -53,9 +90,10 @@ if (!function_exists('enabledLocales')) {
 }
 
 if (!function_exists('localeAndRegion')) {
-    function localeAndRegion(?string $separator = null, ?string $locale = null): ?string
+    function localeAndRegion(?string $separator = null): ?string
     {
-        $localeAndRegion = Arr::get(config('typicms.locales'), app()->getLocale());
+        $locales = config('typicms.locales') + (array) config('typicms.admin_locales');
+        $localeAndRegion = Arr::get($locales, app()->getLocale());
         if (!is_null($separator)) {
             return str_replace('_', $separator, $localeAndRegion);
         }
@@ -67,14 +105,14 @@ if (!function_exists('localeAndRegion')) {
 if (!function_exists('mainLocale')) {
     function mainLocale(): string
     {
-        return Arr::first(locales());
+        return Arr::first(locales()) ?? '';
     }
 }
 
 if (!function_exists('isLocaleEnabled')) {
     function isLocaleEnabled(string $locale): bool
     {
-        return in_array($locale, enabledLocales());
+        return in_array($locale, enabledLocales(), true);
     }
 }
 
@@ -83,7 +121,7 @@ if (!function_exists('getBrowserLocaleOrMainLocale')) {
     {
         $locale = mb_substr((string) getenv('HTTP_ACCEPT_LANGUAGE'), 0, 2);
 
-        if (in_array($locale, enabledLocales())) {
+        if (in_array($locale, enabledLocales(), true)) {
             return $locale;
         }
 
@@ -169,7 +207,7 @@ if (!function_exists('getPagesLinkedToModule')) {
     function getPagesLinkedToModule(?string $module = null): array
     {
         $module = mb_strtolower((string) $module);
-        $routes = app('typicms.routes');
+        $routes = resolve('typicms.routes');
 
         $pages = [];
         foreach ($routes as $page) {
@@ -192,7 +230,9 @@ if (!function_exists('getPageLinkedToModule')) {
 }
 
 if (!function_exists('feeds')) {
-    /** @return Collection<int, Illuminate\Database\Eloquent\Model> */
+    /**
+     * @return Collection<int|string, array{url: string, title: string}>
+     */
     function feeds(): Collection
     {
         $locale = config('app.locale');
@@ -201,7 +241,10 @@ if (!function_exists('feeds')) {
             ->transform(function (array $properties, string $module) use ($locale): ?array {
                 $routeName = $locale . '::' . $module . '-feed';
                 if (isset($properties['has_feed']) && $properties['has_feed'] === true && Route::has($routeName)) {
-                    return ['url' => route($routeName, $module), 'title' => __(ucfirst($module) . ' feed') . ' – ' . websiteTitle()];
+                    return [
+                        'url' => route($routeName, $module),
+                        'title' => __(ucfirst($module) . ' feed') . ' – ' . websiteTitle(),
+                    ];
                 }
 
                 return null;
@@ -213,16 +256,28 @@ if (!function_exists('pageTemplates')) {
     /** @return array<string, string> */
     function pageTemplates(): array
     {
-        $files = File::files(resource_path('views/vendor/pages/public'));
+        /** @var FileViewFinder $finder */
+        $finder = View::getFinder();
+        $hints = $finder->getHints()['public'] ?? [];
+        $path = collect($hints)->map(fn (string $hint): string => "{$hint}/pages")->first(
+            fn (string $dir): bool => File::isDirectory($dir),
+        );
+
+        if ($path === null) {
+            return ['' => 'Default'];
+        }
+
         $templates = [];
-        foreach ($files as $file) {
-            $filename = File::name($file);
+        foreach (File::files($path) as $file) {
+            $filename = File::name($file->getPathname());
             if ($filename === 'default.blade') {
                 continue;
             }
+
             $name = str_replace('.blade', '', $filename);
-            if ($name[0] != '_' && $name != 'master') {
-                $templates[$name] = ucfirst($name);
+            $label = ucfirst(str_replace('-', ' ', $name));
+            if ($name[0] !== '_' && $name !== 'master') {
+                $templates[$name] = $label;
             }
         }
 
@@ -234,16 +289,28 @@ if (!function_exists('pageSectionTemplates')) {
     /** @return array<string, string> */
     function pageSectionTemplates(): array
     {
-        $files = File::files(resource_path('views/vendor/pages/public'));
+        /** @var FileViewFinder $finder */
+        $finder = View::getFinder();
+        $hints = $finder->getHints()['public'] ?? [];
+        $path = collect($hints)->map(fn (string $hint): string => "{$hint}/pages")->first(
+            fn (string $dir): bool => File::isDirectory($dir),
+        );
+
+        if ($path === null) {
+            return ['default' => 'Default'];
+        }
+
         $templates = [];
-        foreach ($files as $file) {
-            $filename = File::name($file);
+        foreach (File::files($path) as $file) {
+            $filename = File::name($file->getPathname());
             if ($filename === '_section-default.blade') {
                 continue;
             }
+
             if (str_starts_with($filename, '_section-')) {
                 $name = str_replace(['_section-', '.blade'], '', $filename);
-                $templates[$name] = ucfirst($name);
+                $label = ucfirst(str_replace('-', ' ', $name));
+                $templates[$name] = $label;
             }
         }
 

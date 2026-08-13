@@ -1,19 +1,32 @@
 .header {
     padding-top: 1rem;
     padding-bottom: 1rem;
-    background-color: $light;
+    background-color: var(--bs-body-bg);
+    border-bottom: 1px solid $gray-200;
+    box-shadow: 0 1px 0 rgba(15, 23, 42, 0.02), 0 2px 8px rgba(15, 23, 42, 0.04);
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+
     &-container {
         @extend .container-xl;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 1rem;
     }
+
     &-title {
-        font-size: 32px; // in px to force constant height on all sreen sizes
+        font-size: 32px; // in px to force constant height on all screen sizes
         line-height: 1.25;
         margin-bottom: 0;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: $gray-900;
         &-logo {
             @extend .img-fluid;
+            max-height: 56px;
+            width: auto;
         }
     }
 }

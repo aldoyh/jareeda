@@ -6,12 +6,14 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Sentry\Laravel\Integration;
+use Spatie\MarkdownResponse\Middleware\ProvideMarkdownResponse;
+use Spatie\ResponseCache\Middlewares\CacheResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use TypiCMS\Modules\Core\Http\Middleware\Impersonate;
 use TypiCMS\Modules\Core\Http\Middleware\JavaScriptData;
@@ -20,7 +22,6 @@ use TypiCMS\Modules\Core\Http\Middleware\PublicAccess;
 use TypiCMS\Modules\Core\Http\Middleware\SetContentLocale;
 use TypiCMS\Modules\Core\Http\Middleware\SetLocaleFromUrl;
 use TypiCMS\Modules\Core\Http\Middleware\SetLocaleFromUser;
-use TypiCMS\Modules\Core\Http\Middleware\SetNavbarLocale;
 use TypiCMS\Modules\Core\Http\Middleware\SetTranslatableFallbackLocaleToNull;
 use TypiCMS\Modules\Core\Http\Middleware\UserPrefs;
 use TypiCMS\Modules\Core\Http\Middleware\VerifyLocalizedUrl;
@@ -46,11 +47,12 @@ return Application::configure(basePath: dirname(__DIR__))
             AddQueuedCookiesToResponse::class,
             StartSession::class,
             ShareErrorsFromSession::class,
-            ValidateCsrfToken::class,
+            PreventRequestForgery::class,
             SubstituteBindings::class,
+            ProvideMarkdownResponse::class,
+            CacheResponse::class,
             PoweredByHeader::class,
             Impersonate::class,
-            SetNavbarLocale::class,
             SetLocaleFromUrl::class,
             VerifyLocalizedUrl::class,
             PublicAccess::class,
@@ -60,7 +62,7 @@ return Application::configure(basePath: dirname(__DIR__))
             AddQueuedCookiesToResponse::class,
             StartSession::class,
             ShareErrorsFromSession::class,
-            ValidateCsrfToken::class,
+            PreventRequestForgery::class,
             SubstituteBindings::class,
 
             Authenticate::class,
@@ -70,12 +72,13 @@ return Application::configure(basePath: dirname(__DIR__))
             SetContentLocale::class,
 
             Impersonate::class,
-            SetNavbarLocale::class,
 
             JavaScriptData::class,
             UserPrefs::class,
         ]);
-        $middleware->redirectGuestsTo(fn (Request $request): string => route(getBrowserLocaleOrMainLocale() . '::login'));
+        $middleware->redirectGuestsTo(fn (Request $request): string => route(
+            ($request->getPreferredLanguage(enabledLocales()) ?? mainLocale()) . '::login',
+        ));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->dontReport([]);

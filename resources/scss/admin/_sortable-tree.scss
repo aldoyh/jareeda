@@ -8,13 +8,10 @@
     position: relative;
 }
 
-<<<<<<< Updated upstream
-=======
 .sl-vue-tree-next-selected > .sl-vue-tree-next-node-item {
     background-color: var(--bs-tertiary-bg);
 }
 
->>>>>>> Stashed changes
 .sl-vue-tree-next-node {
     &-item {
         position: relative;
@@ -23,11 +20,8 @@
         line-height: 28px;
         border: 1px solid transparent;
         border-top-color: var(--bs-border-color);
-<<<<<<< Updated upstream
         padding-left: $table-cell-padding-x;
         padding-right: $table-cell-padding-x;
-=======
->>>>>>> Stashed changes
     }
 }
 
@@ -41,12 +35,10 @@
         cursor: default !important;
     }
 }
-<<<<<<< Updated upstream
-=======
+
 .sl-vue-tree-next-node.sl-vue-tree-next-selected .sl-vue-tree-next-node-item.sl-vue-tree-next-cursor-inside {
     background-color: var(--bs-tertiary-bg);
 }
->>>>>>> Stashed changes
 
 .sl-vue-tree-next-cursor {
     position: absolute;
@@ -63,7 +55,6 @@
 
 .sl-vue-tree-next-toggle {
     position: absolute;
-<<<<<<< Updated upstream
     margin-left: -1.5rem;
 }
 
@@ -78,12 +69,6 @@
         @extend .focus-ring;
         @extend .focus-ring-secondary;
     }
-=======
-    cursor: pointer;
-    left: -15px;
-    top: 4px;
-    color: var(--bs-tertiary-color);
->>>>>>> Stashed changes
 }
 
 .sl-vue-tree-next-sidebar {

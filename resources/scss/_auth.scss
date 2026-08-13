@@ -2,27 +2,33 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    min-height: 100vh;
+    background: linear-gradient(160deg, #eef2ff 0%, var(--bs-body-bg) 45%, #f1f5f9 100%);
     @include media-breakpoint-up(sm) {
-        background-color: var(--bs-gray-200);
+        background-color: var(--bs-gray-100);
+        background-image:
+            radial-gradient(1000px 400px at 85% -10%, rgba($primary, 0.12), transparent 60%),
+            radial-gradient(700px 350px at -10% 110%, rgba($primary, 0.1), transparent 60%);
     }
 }
 @include color-mode(dark) {
     .auth-background {
-        background-color: var(--bs-gray-700);
+        background-color: var(--bs-gray-800);
     }
 }
 .auth {
     background-color: var(--bs-body-bg);
     margin: 5vh auto 0;
-    padding-top: 35px;
+    padding-top: 2rem;
     max-width: 580px;
     @include media-breakpoint-up(sm) {
-        box-shadow: $box-shadow;
-        margin-top: 14vh;
-        border-radius: 20px;
+        box-shadow: $box-shadow-lg;
+        margin-top: 10vh;
+        border: 1px solid var(--bs-border-color);
+        border-radius: 1.25rem;
     }
     &-sm {
-        max-width: 380px;
+        max-width: 420px;
     }
     &-title {
         @include visually-hidden;
@@ -34,7 +40,24 @@
     }
 
     &-form {
-        padding: 35px;
+        padding: 2.25rem;
+        .btn-primary {
+            padding: 0.625rem 1rem;
+            font-weight: 600;
+        }
+        .form-label {
+            font-weight: 600;
+            font-size: $font-size-sm;
+        }
+        .form-control,
+        .form-select {
+            padding-top: 0.625rem;
+            padding-bottom: 0.625rem;
+        }
+        .form-check-input:checked {
+            background-color: $primary;
+            border-color: $primary;
+        }
     }
 
     &-back-to-website {
@@ -49,14 +72,20 @@
             position: absolute;
             margin-top: 20px;
             color: var(--bs-tertiary-color);
+            &:hover {
+                color: var(--bs-primary);
+            }
         }
     }
 
     &-header {
         text-align: center;
+        padding: 0 2.25rem;
         &-logo {
             display: block;
             margin: 0 auto;
+            max-height: 64px;
+            width: auto;
         }
     }
 
@@ -69,6 +98,9 @@
         border-radius: inherit;
         border-top-right-radius: 0;
         border-top-left-radius: 0;
+        border-bottom-left-radius: calc(1.25rem - 1px);
+        border-bottom-right-radius: calc(1.25rem - 1px);
+        text-align: center;
     }
 }
 

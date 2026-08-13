@@ -110,7 +110,7 @@
 
 <script setup>
 import alertify from 'alertify.js';
-import { SearchIcon, SheetIcon } from 'lucide-vue-next';
+import { SearchIcon, SheetIcon } from '@lucide/vue';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

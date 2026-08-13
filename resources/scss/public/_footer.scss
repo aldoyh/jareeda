@@ -1,8 +1,21 @@
 .footer {
-    background-color: $light;
-    padding-top: 3rem;
-    padding-bottom: 3rem;
+    background-color: $footer-bg;
+    color: $footer-text;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    margin-top: 4rem;
+
     &-container {
         @extend .container-xl;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    a {
+        color: $footer-text;
+        &:hover {
+            color: $footer-link-hover;
+        }
     }
 }

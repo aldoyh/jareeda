@@ -1,14 +1,25 @@
-# TypiCMS
+# Jareeda
 
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/TypiCMS/Base/blob/master/LICENCE.md)
-[![Larastan](https://img.shields.io/badge/PHPStan-level%205-brightgreen.svg?style=flat-square)](https://github.com/nunomaduro/larastan)
+Jareeda is a bilingual (`en` / `ar`) news CMS built on [TypiCMS](https://typicms.org) and [Laravel 13](https://laravel.com/docs/13.x).
 
-TypiCMS is a modular multilingual content management system built with [Laravel](https://laravel.com). Out of the box you can manage pages, events, news, places, menus, translations, etc.
+| Runtime | Version |
+| --- | --- |
+| PHP | 8.5.9 (`^8.4`) |
+| Laravel | 13.25.0 |
+| TypiCMS Core | 17.0.39 |
+| Vite | 8.2.1 |
+| Vue | 3.5 |
 
-![TypiCMS screenshot](https://typicms.org/uploads/files/typicms-screenshot.png?4)
+Latest upgrade notes and screenshots: [docs/upgrade-2026.md](docs/upgrade-2026.md).  
+Architecture decision: [docs/decisions/ADR-001-laravel-13-typicms-17.md](docs/decisions/ADR-001-laravel-13-typicms-17.md).
+
+![English home](docs/screenshots/en-home-desktop.png)
+
+![Arabic home](docs/screenshots/ar-home-desktop.png)
 
 ## Table of contents
 
+-   [Quick start](#quick-start)
 -   [Features](#features)
 -   [Requirements](#requirements)
 -   [Installation](#installation)
@@ -40,6 +51,28 @@ TypiCMS is a modular multilingual content management system built with [Laravel]
 -   [Credits](#credits)
 -   [Licence](#licence)
 
+## Quick start
+
+```bash
+composer install
+pnpm install
+cp .env.example .env   # if needed
+php artisan key:generate --no-interaction
+php artisan migrate --no-interaction
+pnpm build
+php artisan serve --host=127.0.0.1 --port=8010 --no-interaction
+```
+
+Public site: http://127.0.0.1:8010/en and http://127.0.0.1:8010/ar  
+Admin: http://127.0.0.1:8010/admin (redirects to localized login)
+
+| Command | Description |
+| --- | --- |
+| `pnpm dev` | Vite dev server |
+| `pnpm build` | Production assets |
+| `composer run dev` | App, queue, logs, and Vite together |
+| `vendor/bin/pint --dirty` | Format changed PHP |
+
 ## Features
 
 ### URLs
@@ -58,16 +91,11 @@ These kind of URLs are managed by the CMS:
 
 ## Requirements
 
--   PHP >= 7.2
--   MySQL 5.7.8
--   BCMath PHP Extension
--   Ctype PHP Extension
--   JSON PHP Extension
--   Mbstring PHP Extension
--   OpenSSL PHP Extension
--   PDO PHP Extension
--   Tokenizer PHP Extension
--   XML PHP Extension
+-   PHP 8.4+ (8.5.9 is the current local runtime)
+-   SQLite (default local) or MySQL 8 / MariaDB
+-   Composer 2.10+
+-   Node 22+ and pnpm 11+ (or Bun) for Vite 8
+-   BCMath, Ctype, JSON, Mbstring, OpenSSL, PDO, Tokenizer, XML PHP extensions
 
 ## Installation
 
@@ -97,20 +125,15 @@ Go to http://mywebsite.test/admin and log in.
 
 ### Assets
 
-Assets are bundled with [Vite](https://laravel.com/docs/master/vite).
-In order to work on assets, you can install [Bun](https://bun.com), then go to your website folder and run these commands:
+Assets are bundled with [Vite 8](https://laravel.com/docs/13.x/vite) and `laravel-vite-plugin` 3.
 
-1. Install npm packages (in directory **node_modules**)
+```bash
+pnpm install
+pnpm dev      # watch
+pnpm build    # production
+```
 
-    ```
-    bun install
-    ```
-
-2. Compile admin and public assets
-
-    ```
-    bun run dev
-    ```
+Bun (`bun install` / `bun run dev`) still works if that is your local package manager. After frontend changes, rebuild or run the Vite dev server or the UI will keep serving `public/build`.
 
 ### Locales configuration
 
@@ -279,7 +302,7 @@ When a module is published, it will be tracked by git and you will be able to ma
 
 ## Changelog
 
-Please see [CHANGELOG](https://github.com/TypiCMS/Base/blob/master/CHANGELOG.md) for more information on what has changed.
+See [CHANGELOG.md](CHANGELOG.md) and [docs/upgrade-2026.md](docs/upgrade-2026.md).
 
 ## Contributing
 

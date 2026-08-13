@@ -9,10 +9,15 @@
     width: 50px;
     text-decoration: none;
     background-color: transparent;
-    border: none;
+    border: 1px solid $gray-300;
+    border-radius: $border-radius-pill;
+    &:hover {
+        background-color: rgba($primary, 0.06);
+        border-color: $primary;
+    }
     &:focus-visible {
         outline: 0;
-        box-shadow: 0 0 $focus-ring-blur $focus-ring-width rgba($white, 0.5);
+        box-shadow: 0 0 $focus-ring-blur $focus-ring-width rgba($primary, 0.35);
     }
     @include media-breakpoint-up(lg) {
         display: none;
@@ -27,6 +32,7 @@
         background-color: $primary;
         height: 2px;
         width: 26px;
+        border-radius: 2px;
     }
     &:before {
         top: 20px;

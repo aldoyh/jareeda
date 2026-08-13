@@ -1,0 +1,213 @@
+// ---------------------------------------------------------------------------
+// Global admin theme refinements — dark sidebar + light content design
+// ---------------------------------------------------------------------------
+
+::selection {
+    background-color: rgba($primary, 0.22);
+}
+
+body {
+    letter-spacing: -0.006em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+// ---- Cards ----------------------------------------------------------------
+.card {
+    box-shadow: $box-shadow;
+    overflow: hidden;
+}
+
+.main-content,
+.item-list-content {
+    box-shadow: $box-shadow;
+    border-radius: $card-border-radius;
+    overflow: hidden;
+}
+
+// ---- Typography in content -------------------------------------------------
+.header {
+    &-title {
+        font-weight: 700;
+        letter-spacing: -0.015em;
+    }
+}
+
+h1,
+h2,
+h3 {
+    letter-spacing: -0.015em;
+}
+
+.text-muted {
+    color: var(--bs-secondary-color) !important;
+}
+
+// ---- Tables ----------------------------------------------------------------
+.table {
+    --bs-table-hover-bg: var(--bs-tertiary-bg);
+    --bs-table-striped-bg: rgba(15, 23, 42, 0.018);
+    thead th {
+        background-color: var(--bs-body-bg);
+        border-bottom-width: 1px;
+        border-bottom-color: var(--bs-border-color);
+        color: var(--bs-secondary-color);
+        font-size: $font-size-sm * 0.9;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        padding-top: $table-cell-padding-y * 0.75;
+        padding-bottom: $table-cell-padding-y * 0.75;
+        white-space: nowrap;
+        a {
+            color: inherit;
+        }
+    }
+    tbody tr {
+        transition: background-color 0.12s ease;
+    }
+    td {
+        vertical-align: middle;
+    }
+}
+
+// ---- Forms ----------------------------------------------------------------
+.form-control,
+.form-select {
+    border-radius: $border-radius-sm;
+    &:focus {
+        border-color: $input-focus-border-color;
+        box-shadow: $input-focus-box-shadow;
+    }
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: $font-size-sm;
+    color: var(--bs-body-color);
+}
+
+.form-text {
+    font-size: $font-size-sm * 0.9;
+}
+
+.form-check-input:checked {
+    background-color: $primary;
+    border-color: $primary;
+}
+
+.input-group-text {
+    color: var(--bs-secondary-color);
+}
+
+// ---- Buttons ----------------------------------------------------------------
+.btn {
+    border-radius: $border-radius-sm;
+    font-weight: 500;
+    transition:
+        color 0.15s ease-in-out,
+        background-color 0.15s ease-in-out,
+        border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
+    &:focus-visible {
+        box-shadow: $btn-focus-box-shadow;
+    }
+}
+
+.btn-primary {
+    --bs-btn-bg: #{$primary};
+    --bs-btn-border-color: #{$primary};
+    --bs-btn-hover-bg: #{$primary-600};
+    --bs-btn-hover-border-color: #{$primary-600};
+    --bs-btn-active-bg: #{$primary-700};
+    --bs-btn-active-border-color: #{$primary-700};
+    --bs-btn-disabled-bg: #{$primary};
+    --bs-btn-disabled-border-color: #{$primary};
+}
+
+.btn-link {
+    font-weight: 500;
+}
+
+// ---- Badges ---------------------------------------------------------------
+.badge {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    &.text-bg-secondary {
+        background-color: var(--bs-secondary-bg) !important;
+        color: var(--bs-secondary-color) !important;
+    }
+}
+
+// ---- Dropdowns -------------------------------------------------------------
+.dropdown-menu {
+    box-shadow: $dropdown-box-shadow;
+    border: 1px solid $dropdown-border-color;
+    border-radius: $dropdown-border-radius;
+    padding: 0.375rem;
+    .dropdown-item {
+        border-radius: $border-radius-sm;
+        font-size: $font-size-base;
+        padding: $dropdown-item-padding-y $dropdown-item-padding-x;
+        &:active {
+            background-color: $primary;
+        }
+    }
+}
+
+// ---- Modals ---------------------------------------------------------------
+.modal-content {
+    border: $modal-content-border-width solid var(--bs-border-color);
+    border-radius: $modal-content-border-radius;
+    box-shadow: $modal-content-box-shadow-xs;
+}
+
+// ---- Pagination -------------------------------------------------------------
+.pagination {
+    gap: 0.25rem;
+    .page-link {
+        min-width: 2rem;
+        min-height: 2rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: $pagination-border-radius;
+    }
+}
+
+// ---- Scrollbars --------------------------------------------------------------
+@media (prefers-reduced-motion: no-preference) {
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--bs-gray-400) transparent;
+    }
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: var(--bs-gray-400);
+        border-radius: 4px;
+    }
+}
+
+// ---- Sidebar / navbar icon spacing -------------------------------------------
+.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// ---- Right column -------------------------------------------------------------
+.right-column {
+    box-shadow: $box-shadow-sm;
+    background-color: var(--bs-body-bg);
+}
+
+// ---- Alertify --------------------------------------------------------------
+.alertify-logs {
+    > div {
+        border-radius: $border-radius;
+        box-shadow: $box-shadow-lg;
+    }
+}

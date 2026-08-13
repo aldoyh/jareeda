@@ -2,6 +2,28 @@
 
 All notable changes to TypiCMS will be documented in this file.
 
+## 17.0.0 - 2026-08-12
+
+Jareeda in-place upgrade to Laravel 13 and TypiCMS 17. Details and screenshots: [docs/upgrade-2026.md](docs/upgrade-2026.md). Decision: [ADR-001](docs/decisions/ADR-001-laravel-13-typicms-17.md).
+
+### Changed
+
+- Laravel 12.66 → 13.25, TypiCMS Core 15.0.30 → 17.0.39, PHP constraint `^8.4`.
+- Vite 7 → 8, laravel-vite-plugin 2 → 3, ESLint 9 → 10, Sass 1.102, Cropper.js 2.
+- Replaced deprecated `lucide-vue-next` with `@lucide/vue`.
+- Spatie Permission 6 → 8, Query Builder 6 → 7, Symfony HTTP/Mailgun 7 → 8.
+- CSRF middleware renamed to `PreventRequestForgery`.
+- Helpers and public middleware aligned with TypiCMS 17 (`showAdminButtons()`, response cache, markdown response).
+
+### Removed
+
+- Abandoned packages: `genealabs/laravel-model-caching`, `typicms/things`, `laracasts/presenter`, `msurguy/honeypot`.
+- `spatie/laravel-translatable` replaced by `typicms/translatable`.
+
+### Added
+
+- `spatie/laravel-responsecache` and `spatie/laravel-markdown-response` (required by TypiCMS 17 auth/public routes).
+
 ## 15.0.11 - 2025-10-08
 
 ### Changed
