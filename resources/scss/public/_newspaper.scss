@@ -1,0 +1,326 @@
+// Newspaper-style layout for Jareeda
+// Multi-column layout with justified text for English and Arabic
+
+// Newspaper layout variables
+$newspaper-column-gap: 2em;
+$newspaper-column-rule: 1px solid var(--bs-gray-300);
+$newspaper-max-columns: 3;
+$newspaper-min-column-width: 18em;
+
+// Typography scale for newspaper
+$newspaper-headline-font: 'Playfair Display', 'Georgia', serif;
+$newspaper-body-font: 'Source Serif 4', 'Georgia', serif;
+$newspaper-caption-font: 'Inter', -apple-system, sans-serif;
+
+// Arabic font overrides
+$newspaper-arabic-headline-font: 'Noto Naskh Arabic', 'Amiri', serif;
+$newspaper-arabic-body-font: 'Noto Naskh Arabic', 'Amiri', serif;
+
+// Main newspaper container
+.newspaper {
+    // Multi-column layout
+    column-count: $newspaper-max-columns;
+    column-width: $newspaper-min-column-width;
+    column-gap: $newspaper-column-gap;
+    column-rule: $newspaper-column-rule;
+    column-fill: balance;
+
+    // Responsive breakpoints
+    @include media-breakpoint-down(lg) {
+        column-count: 2;
+    }
+
+    @include media-breakpoint-down(md) {
+        column-count: 1;
+        column-rule: none;
+    }
+
+    // Justified text for newspaper feel
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+
+    // Typography
+    font-family: $newspaper-body-font;
+    font-size: $font-size-base;
+    line-height: 1.7;
+}
+
+// Arabic newspaper overrides
+[dir="rtl"] .newspaper,
+.newspaper[lang="ar"],
+[lang="ar"] .newspaper {
+    font-family: $newspaper-arabic-body-font;
+    text-align: justify;
+    // Arabic justification uses word spacing by default
+    // For better Arabic justification, consider kashida plugin
+}
+
+// Newspaper header (masthead)
+.newspaper-masthead {
+    column-span: all;
+    text-align: center;
+    padding: 2rem 0;
+    border-bottom: 3px double var(--bs-gray-900);
+    margin-bottom: 2rem;
+
+    &__title {
+        font-family: $newspaper-headline-font;
+        font-size: $h1-font-size * 1.5;
+        font-weight: 900;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+        line-height: 1.1;
+    }
+
+    [lang="ar"] &__title {
+        font-family: $newspaper-arabic-headline-font;
+        text-transform: none;
+        letter-spacing: 0;
+    }
+
+    &__subtitle {
+        font-family: $newspaper-caption-font;
+        font-size: $font-size-base * 0.875;
+        color: var(--bs-gray-600);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    &__date {
+        font-family: $newspaper-caption-font;
+        font-size: $font-size-base * 0.8125;
+        color: var(--bs-gray-500);
+        margin-top: 0.5rem;
+    }
+
+    &__rule {
+        border: none;
+        border-top: 1px solid var(--bs-gray-400);
+        margin: 1rem 0;
+    }
+}
+
+// Featured article (spans all columns)
+.newspaper-featured {
+    column-span: all;
+    break-inside: avoid;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid var(--bs-gray-900);
+
+    &__image {
+        width: 100%;
+        height: auto;
+        margin-bottom: 1rem;
+        border-radius: $border-radius;
+    }
+
+    &__title {
+        font-family: $newspaper-headline-font;
+        font-size: $h1-font-size;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 0.75rem;
+    }
+
+    [lang="ar"] &__title {
+        font-family: $newspaper-arabic-headline-font;
+    }
+
+    &__excerpt {
+        font-size: $font-size-base * 1.125;
+        line-height: 1.6;
+        color: var(--bs-gray-700);
+    }
+
+    &__meta {
+        font-family: $newspaper-caption-font;
+        font-size: $font-size-base * 0.8125;
+        color: var(--bs-gray-500);
+        margin-top: 1rem;
+    }
+}
+
+// Article card in newspaper layout
+.newspaper-article {
+    break-inside: avoid;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--bs-gray-200);
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &__image {
+        width: 100%;
+        height: auto;
+        margin-bottom: 0.75rem;
+        border-radius: $border-radius-sm;
+    }
+
+    &__category {
+        font-family: $newspaper-caption-font;
+        font-size: $font-size-base * 0.75;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: $primary;
+        margin-bottom: 0.25rem;
+    }
+
+    &__title {
+        font-family: $newspaper-headline-font;
+        font-size: $h3-font-size;
+        font-weight: 700;
+        line-height: 1.3;
+        margin-bottom: 0.5rem;
+
+        a {
+            color: var(--bs-gray-900);
+            text-decoration: none;
+
+            &:hover {
+                color: $primary;
+            }
+        }
+    }
+
+    [lang="ar"] &__title {
+        font-family: $newspaper-arabic-headline-font;
+    }
+
+    &__excerpt {
+        font-size: $font-size-base * 0.9375;
+        line-height: 1.6;
+        color: var(--bs-gray-700);
+        margin-bottom: 0.5rem;
+    }
+
+    &__meta {
+        font-family: $newspaper-caption-font;
+        font-size: $font-size-base * 0.75;
+        color: var(--bs-gray-500);
+    }
+
+    &__author {
+        font-weight: 600;
+        color: var(--bs-gray-700);
+    }
+
+    &__time {
+        color: var(--bs-gray-500);
+    }
+}
+
+// AI-generated image indicator
+.newspaper-article__ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-family: $newspaper-caption-font;
+    font-size: $font-size-base * 0.6875;
+    font-weight: 500;
+    color: var(--bs-gray-500);
+    background-color: var(--bs-gray-100);
+    padding: 0.125rem 0.5rem;
+    border-radius: $border-radius-sm;
+    margin-top: 0.25rem;
+
+    &::before {
+        content: "✦";
+        font-size: 0.75em;
+    }
+}
+
+// Section divider in newspaper
+.newspaper-divider {
+    column-span: all;
+    border: none;
+    border-top: 2px solid var(--bs-gray-900);
+    margin: 2rem 0;
+
+    &--thick {
+        border-top-width: 3px;
+    }
+
+    &--double {
+        border-top: 3px double var(--bs-gray-900);
+    }
+
+    &__label {
+        display: inline-block;
+        font-family: $newspaper-caption-font;
+        font-size: $font-size-base * 0.75;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--bs-gray-900);
+        background-color: var(--bs-white);
+        padding: 0 1rem;
+        position: relative;
+        top: -0.75rem;
+    }
+}
+
+// Column rules customization
+.newspaper--no-rules {
+    column-rule: none;
+}
+
+.newspaper--dashed-rules {
+    column-rule: 1px dashed var(--bs-gray-400);
+}
+
+.newspaper--thick-rules {
+    column-rule: 2px solid var(--bs-gray-900);
+}
+
+// Print styles
+@media print {
+    .newspaper {
+        column-count: 2 !important;
+        column-gap: 1cm;
+        column-rule: 0.5pt solid #000;
+        font-size: 10pt;
+        line-height: 1.4;
+    }
+
+    .newspaper-masthead {
+        column-span: all;
+        border-bottom: 2pt solid #000;
+    }
+
+    .newspaper-featured {
+        column-span: all;
+    }
+
+    .newspaper-article {
+        break-inside: avoid;
+    }
+
+    .newspaper-article__ai-badge {
+        display: none;
+    }
+}
+
+// Accessibility - reduced motion
+@media (prefers-reduced-motion: reduce) {
+    .newspaper {
+        column-fill: auto;
+    }
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+    .newspaper {
+        column-rule: 2px solid #000;
+    }
+
+    .newspaper-article {
+        border-bottom: 2px solid #000;
+    }
+}
