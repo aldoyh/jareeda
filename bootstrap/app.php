@@ -35,6 +35,8 @@ return Application::configure(basePath: dirname(__DIR__))
         then: function (Application $app): void {
             $app->booted(function ($app): void {
                 $app->register(PagesRoutesServiceProvider::class);
+                // AI Image Generation routes
+                require __DIR__ . '/../routes/ai-image.php';
             });
         }
     )

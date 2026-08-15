@@ -50,9 +50,12 @@ $newspaper-arabic-body-font: 'Noto Naskh Arabic', 'Amiri', serif;
 // Arabic newspaper overrides
 [dir="rtl"] .newspaper,
 .newspaper[lang="ar"],
-[lang="ar"] .newspaper {
+[lang="ar"] .newspaper,
+body-ar .newspaper,
+.body-ar .newspaper {
     font-family: $newspaper-arabic-body-font;
     text-align: justify;
+    direction: rtl;
     // Arabic justification uses word spacing by default
     // For better Arabic justification, consider kashida plugin
 }
@@ -75,7 +78,8 @@ $newspaper-arabic-body-font: 'Noto Naskh Arabic', 'Amiri', serif;
         line-height: 1.1;
     }
 
-    [lang="ar"] &__title {
+    [lang="ar"] &__title,
+    .body-ar &__title {
         font-family: $newspaper-arabic-headline-font;
         text-transform: none;
         letter-spacing: 0;
@@ -126,7 +130,8 @@ $newspaper-arabic-body-font: 'Noto Naskh Arabic', 'Amiri', serif;
         margin-bottom: 0.75rem;
     }
 
-    [lang="ar"] &__title {
+    [lang="ar"] &__title,
+    .body-ar &__title {
         font-family: $newspaper-arabic-headline-font;
     }
 
@@ -189,7 +194,8 @@ $newspaper-arabic-body-font: 'Noto Naskh Arabic', 'Amiri', serif;
         }
     }
 
-    [lang="ar"] &__title {
+    [lang="ar"] &__title,
+    .body-ar &__title {
         font-family: $newspaper-arabic-headline-font;
     }
 

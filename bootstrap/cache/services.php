@@ -61,6 +61,7 @@
     57 => 'TypiCMS\\Modules\\Core\\Providers\\TranslationsServiceProvider',
     58 => 'TypiCMS\\Modules\\Core\\Providers\\ModuleServiceProvider',
     59 => 'App\\Providers\\AppServiceProvider',
+    60 => 'App\\Providers\\UnslothServiceProvider',
   ),
   'eager' => 
   array (
@@ -104,6 +105,7 @@
     37 => 'TypiCMS\\LaravelTranslatableBootForms\\TranslatableBootFormsServiceProvider',
     38 => 'TypiCMS\\Modules\\Core\\Providers\\ModuleServiceProvider',
     39 => 'App\\Providers\\AppServiceProvider',
+    40 => 'App\\Providers\\UnslothServiceProvider',
   ),
   'deferred' => 
   array (

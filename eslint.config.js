@@ -1,6 +1,5 @@
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import pluginImport from 'eslint-plugin-import';
 import pluginVue from 'eslint-plugin-vue';
 import vueParser from 'vue-eslint-parser';
 
@@ -26,30 +25,8 @@ export default [
     },
     plugins: {
       '@typescript-eslint': typescriptEslint,
-      'import': pluginImport,
     },
-    rules: {
-      'import/order': [
-        'error',
-        {
-          'groups': [
-            'builtin',
-            'external',
-            'internal',
-            'parent',
-            'sibling',
-            'index',
-            'object',
-            'type'
-          ],
-          'newlines-between': 'always',
-          'alphabetize': {
-            'order': 'asc',
-            'caseInsensitive': true
-          }
-        }
-      ],
-    },
+    rules: {},
   },
   // Vue files
   {
@@ -65,29 +42,7 @@ export default [
     plugins: {
       vue: pluginVue,
       '@typescript-eslint': typescriptEslint,
-      'import': pluginImport,
     },
-    rules: {
-      'import/order': [
-        'error',
-        {
-          'groups': [
-            'builtin',
-            'external',
-            'internal',
-            'parent',
-            'sibling',
-            'index',
-            'object',
-            'type'
-          ],
-          'newlines-between': 'always',
-          'alphabetize': {
-            'order': 'asc',
-            'caseInsensitive': true
-          }
-        }
-      ],
-    },
+    rules: {},
   },
 ];

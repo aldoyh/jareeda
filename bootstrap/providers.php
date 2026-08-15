@@ -1,6 +1,7 @@
 <?php
 
 use App\Providers\AppServiceProvider;
+use App\Providers\UnslothServiceProvider;
 use TypiCMS\LaravelTranslatableBootForms\TranslatableBootFormsServiceProvider;
 use TypiCMS\Modules\Core\Providers\ModuleServiceProvider;
 use TypiCMS\Modules\Core\Providers\TranslationsServiceProvider;
@@ -22,4 +23,5 @@ return [
 
     // Application Service Providers.
     AppServiceProvider::class,
+    UnslothServiceProvider::class,
 ];
