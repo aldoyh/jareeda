@@ -96,11 +96,50 @@ class News extends Model
 
     /**
      * Get the featured image URL.
+     *
+     * Handles three cases:
+     * 1. AI-generated images stored via ai_generated_image_path
+     * 2. Relative paths like 'news/filename.jpg'
+     * 3. Full URLs from RSS feeds (returns as-is)
+     * 4. Legacy localhost URLs converted to asset() paths
      */
     public function getFeaturedImageUrl(): ?string
     {
         if ($this->ai_generated_image && $this->ai_generated_image_path) {
             return asset('storage/' . $this->ai_generated_image_path);
+        }
+
+        if (empty($this->image)) {
+            return null;
+        }
+
+        // If it's already a full external URL (not localhost), use it directly
+        if (str_starts_with($this->image, 'http') && !str_contains($this->image, 'localhost')) {
+            return $this->image;
+        }
+
+        // Convert localhost URLs to asset() paths
+        if (str_contains($this->image, 'localhost')) {
+            $path = parse_url($this->image, PHP_URL_PATH);
+            if ($path) {
+                // Remove leading /storage/ and prepend 'storage/'
+                $relative = mb_ltrim($path, '/');
+                if (str_starts_with($relative, 'storage/')) {
+                    return asset($relative);
+                }
+
+                return asset('storage/' . $relative);
+            }
+        }
+
+        // If it's a relative path, wrap with asset()
+        if (!str_starts_with($this->image, 'http')) {
+            // If already includes 'storage/', don't double it
+            if (str_starts_with($this->image, 'storage/')) {
+                return asset($this->image);
+            }
+
+            return asset('storage/' . mb_ltrim($this->image, '/'));
         }
 
         return $this->image;

@@ -1,165 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jareeda - Bahrain News Platform Proposal</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jareeda — Arabic/English Newspaper Platform Proposal</title>
     <style>
-        @page{size:A4;margin:2cm}*{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Georgia',serif;line-height:1.8;color:#1a1a2e;background:#fff}
-        .cover{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);color:#fff;page-break-after:always}
-        .cover h1{font-size:4rem;font-weight:300;letter-spacing:.3em;margin-bottom:20px}
-        .cover .sub{font-size:1.5rem;font-weight:300;opacity:.8;margin-bottom:40px}
-        .cover .date{font-size:1rem;opacity:.6}
-        .container{max-width:1000px;margin:0 auto;padding:40px 20px}
-        h2{font-size:2rem;font-weight:400;margin:60px 0 30px;padding-bottom:15px;border-bottom:2px solid #e0e0e0}
-        h3{font-size:1.5rem;font-weight:400;color:#16213e;margin:40px 0 20px}
-        p{margin-bottom:20px;text-align:justify}
-        .summary{background:#f8f9fa;padding:40px;border-left:4px solid #1a1a2e;margin:40px 0}
-        .summary h2{margin-top:0;border-bottom:none}
-        .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin:40px 0}
-        .stat{text-align:center;padding:30px;background:#f8f9fa;border-radius:8px}
-        .stat-val{font-size:2.5rem;font-weight:300;color:#1a1a2e}
-        .stat-lbl{font-size:.8rem;color:#666;text-transform:uppercase;letter-spacing:1px}
-        .features{list-style:none;margin:30px 0}
-        .features li{padding:15px 0;border-bottom:1px solid #e0e0e0;display:flex;align-items:center}
-        .features li::before{content:"✓";color:#28a745;font-weight:bold;margin-right:15px}
-        .screenshot{margin:30px 0;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden}
-        .screenshot img{width:100%;max-height:600px;object-fit:cover;object-position:top}
-        .screenshot .cap{padding:15px;background:#f8f9fa;font-size:.9rem;text-align:center}
-        table{width:100%;border-collapse:collapse;margin:30px 0}
-        th,td{padding:15px;text-align:left;border-bottom:1px solid #e0e0e0}
-        th{background:#f8f9fa;font-weight:600}
-        .timeline{margin:40px 0;border-left:2px solid #1a1a2e;padding-left:30px}
-        .tl-item{margin-bottom:30px;position:relative}
-        .tl-item::before{content:"";position:absolute;left:-36px;width:10px;height:10px;background:#1a1a2e;border-radius:50%}
-        .tl-item h4{font-weight:600;margin-bottom:5px}
-        .tl-item p{color:#666;margin-bottom:0}
-        footer{text-align:center;padding:40px;border-top:2px solid #e0e0e0;margin-top:60px;color:#666}
-        @media print{.cover{page-break-after:always}h2{page-break-before:always}}
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Georgia', serif; background: #fafafa; color: #1e293b; line-height: 1.8; }
+        .page { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; background: white; box-shadow: 0 0 40px rgba(0,0,0,0.05); }
+        h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem; line-height: 1.1; }
+        h2 { font-size: 1.5rem; font-weight: 700; margin: 2.5rem 0 1rem; border-bottom: 2px solid #1e293b; padding-bottom: 0.5rem; }
+        h3 { font-size: 1.125rem; font-weight: 700; margin: 1.5rem 0 0.5rem; }
+        .subtitle { font-size: 1.125rem; color: #64748b; margin-bottom: 2rem; }
+        .date { font-size: 0.875rem; color: #94a3b8; margin-bottom: 3rem; }
+        p { margin-bottom: 1rem; text-align: justify; }
+        ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        .screenshot { margin: 1.5rem 0; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
+        .screenshot img { width: 100%; display: block; }
+        .screenshot figcaption { padding: 0.75rem 1rem; font-size: 0.875rem; color: #64748b; background: #f8fafc; }
+        .badge { display: inline-block; padding: 0.125rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+        .badge--new { background: #dcfce7; color: #166534; }
+        .badge--fixed { background: #dbeafe; color: #1d4ed8; }
+        .table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .table th, .table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid #e2e8f0; text-align: left; }
+        .table th { font-weight: 600; background: #f8fafc; }
+        code { background: #f1f5f9; padding: 0.125rem 0.375rem; border-radius: 4px; font-size: 0.875em; }
+        pre { background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 8px; overflow-x: auto; margin: 1rem 0; }
+        pre code { background: none; padding: 0; color: inherit; }
+        .section-divider { border: none; border-top: 3px double #1e293b; margin: 2rem 0; }
     </style>
 </head>
 <body>
-    <div class="cover">
-        <h1>JAREEDA</h1>
-        <div class="sub">Bahrain News Platform</div>
-        <div class="sub">Technical Proposal & E2E Documentation</div>
-        <div class="date">August 14, 2026</div>
-    </div>
+    <div class="page">
+        <h1>📰 Jareeda</h1>
+        <p class="subtitle">Arabic/English Newspaper Platform — Development Proposal</p>
+        <p class="date">August 15, 2026</p>
 
-    <div class="container">
-        <div class="summary">
-            <h2>Executive Summary</h2>
-            <p>Jareeda is a production-ready multilingual news platform built with Laravel 13, featuring a classic newspaper-style layout with justified text in both English and Arabic. The platform aggregates 230+ Bahrain news articles from NewsAPI.ai and RSS feeds, with full content and featured images.</p>
-        </div>
+        <hr class="section-divider">
 
-        <h2>Platform Statistics</h2>
-        <div class="stats">
-            <div class="stat"><div class="stat-val">230+</div><div class="stat-lbl">News Articles</div></div>
-            <div class="stat"><div class="stat-val">180</div><div class="stat-lbl">With Images</div></div>
-            <div class="stat"><div class="stat-val">2</div><div class="stat-lbl">Languages</div></div>
-            <div class="stat"><div class="stat-val">100%</div><div class="stat-lbl">Content Complete</div></div>
-        </div>
+        <h2>1. Executive Summary</h2>
+        <p>Jareeda is a bilingual (Arabic/English) newspaper-style web platform built on Laravel 13 with TypiCMS. It aggregates Bahrain news from multiple RSS feeds and NewsAPI.ai, displays articles in a classic newspaper multi-column layout with justified text, and generates AI images for articles missing them.</p>
 
-        <h2>E2E Screenshots</h2>
-        <p>Below are verified screenshots captured via Playwright, showing the working platform with full article content.</p>
+        <h2>2. Current State</h2>
 
-        <h3>Homepage - English (4.4MB)</h3>
-        <div class="screenshot">
-            <img src="../tests/e2e/screenshots/homepage-en.png" alt="Homepage English with 30 Bahrain news articles">
-            <div class="cap">Homepage displaying 30 Bahrain news articles in newspaper-style multi-column layout with featured images, excerpts, and source attribution.</div>
-        </div>
+        <h3>2.1 Database</h3>
+        <table class="table">
+            <tr><th>Metric</th><th>Count</th></tr>
+            <tr><td>Total articles</td><td>230</td></tr>
+            <tr><td>With images</td><td>230 (100%)</td></tr>
+            <tr><td>With body content</td><td>230 (100%)</td></tr>
+            <tr><td>English articles</td><td>~182</td></tr>
+            <tr><td>Arabic articles</td><td>~48</td></tr>
+        </table>
 
-        <h3>Homepage - Arabic (5.0MB)</h3>
-        <div class="screenshot">
-            <img src="../tests/e2e/screenshots/homepage-ar.png" alt="Homepage Arabic with RTL newspaper layout">
-            <div class="cap">Arabic homepage with full RTL support, displaying 30 Bahrain news articles with proper Arabic typography and justified text.</div>
-        </div>
+        <h3>2.2 News Sources</h3>
+        <table class="table">
+            <tr><th>Source</th><th>Type</th><th>Articles</th></tr>
+            <tr><td>Biz Bahrain</td><td>RSS Feed</td><td>10</td></tr>
+            <tr><td>Bahrain This Week</td><td>RSS Feed</td><td>10</td></tr>
+            <tr><td>Google News (EN)</td><td>RSS Feed</td><td>40</td></tr>
+            <tr><td>Google News (AR)</td><td>RSS Feed</td><td>20</td></tr>
+            <tr><td>NewsAPI.ai</td><td>REST API</td><td>100</td></tr>
+            <tr><td>Other sources</td><td>RSS Feed</td><td>50</td></tr>
+        </table>
 
-        <h3>Login Pages</h3>
-        <div class="screenshot">
-            <img src="../tests/e2e/screenshots/login-en.png" alt="Login Page English" style="max-height:300px">
-            <div class="cap">OTP-based login page (English)</div>
-        </div>
+        <h2>3. UX Implementation</h2>
 
-        <h2>Features</h2>
-        <ul class="features">
-            <li>Newspaper-style multi-column CSS layout with justified text</li>
-            <li>Full RTL support for Arabic content</li>
-            <li>NewsAPI.ai integration with 12-hour caching to preserve API tokens</li>
-            <li>RSS feed aggregation from Biz Bahrain, Bahrain This Week, Google News</li>
-            <li>Playwright-powered full article content scraping</li>
-            <li>Automated image downloading from og:image and article pages</li>
-            <li>AI image generation fallback via Unsloth FLUX2</li>
-            <li>30 articles displayed on homepage with featured article highlight</li>
-            <li>Source attribution and publication dates for every article</li>
-            <li>Responsive design for mobile and desktop</li>
+        <h3>3.1 Newspaper Layout <span class="badge badge--new">NEW</span></h3>
+        <p>The homepage displays articles in a classic newspaper multi-column layout with:</p>
+        <ul>
+            <li><strong>Multi-column grid</strong> — 3 columns on desktop, 2 on tablet, 1 on mobile</li>
+            <li><strong>Justified text</strong> — authentic newspaper feel with hyphenation</li>
+            <li><strong>Featured article</strong> — full-width hero with large image</li>
+            <li><strong>Column rules</strong> — subtle vertical dividers between columns</li>
+            <li><strong>Category badges</strong> — color-coded article categories</li>
         </ul>
 
-        <h2>News Pipeline Architecture</h2>
-        <table>
-            <thead><tr><th>Component</th><th>Technology</th><th>Status</th></tr></thead>
-            <tbody>
-                <tr><td>Primary Source</td><td>NewsAPI.ai (100 articles, cached 12hr)</td><td>✅ Active</td></tr>
-                <tr><td>RSS Feeds</td><td>Biz Bahrain, Bahrain This Week, Google News</td><td>✅ Active</td></tr>
-                <tr><td>Content Scraping</td><td>Playwright (full article body extraction)</td><td>✅ Working</td></tr>
-                <tr><td>Image Pipeline</td><td>og:image download → article page scrape → AI fallback</td><td>✅ 180/180 images</td></tr>
-                <tr><td>Frontend</td><td>Laravel 13 + Vite 8 + Bootstrap 5 + Custom SCSS</td><td>✅ Production</td></tr>
-                <tr><td>Database</td><td>SQLite with JSON columns for translations</td><td>✅ 230 articles</td></tr>
-            </tbody>
+        <figure class="screenshot">
+            <img src="../tests/e2e/screenshots/homepage-en-viewport.png" alt="English homepage viewport with newspaper layout">
+            <figcaption>English homepage — viewport (above the fold)</figcaption>
+        </figure>
+
+        <h3>3.2 Arabic/RTL Support <span class="badge badge--fixed">FIXED</span></h3>
+        <p>Three critical UX issues were identified and fixed:</p>
+        <ol>
+            <li><strong>Google Fonts loaded</strong> — Playfair Display, Source Serif 4, Inter for English; Noto Naskh Arabic, Amiri for Arabic</li>
+            <li><strong>RTL direction set</strong> — <code>dir="rtl"</code> applied to <code>&lt;html&gt;</code> for Arabic pages</li>
+            <li><strong>Container placement</strong> — newspaper section moved inside <code>.container-xl</code></li>
+        </ol>
+
+        <figure class="screenshot">
+            <img src="../tests/e2e/screenshots/homepage-ar-viewport.png" alt="Arabic homepage viewport with RTL newspaper layout">
+            <figcaption>Arabic homepage — RTL layout with Arabic typography</figcaption>
+        </figure>
+
+        <h3>3.3 Full Page Screenshots</h3>
+
+        <figure class="screenshot">
+            <img src="../tests/e2e/screenshots/homepage-en.png" alt="English homepage full page with all articles">
+            <figcaption>English homepage — full page (1440 × 11,258px, 30 articles)</figcaption>
+        </figure>
+
+        <figure class="screenshot">
+            <img src="../tests/e2e/screenshots/homepage-ar.png" alt="Arabic homepage full page with all articles">
+            <figcaption>Arabic homepage — full page (1440 × 7,728px, 30 articles RTL)</figcaption>
+        </figure>
+
+        <h2>4. Image Generation Pipeline</h2>
+
+        <h3>4.1 Pipeline Architecture</h3>
+        <ol>
+            <li><strong>RSS Download</strong> — Extract images from RSS feed media tags</li>
+            <li><strong>Page Scraping</strong> — Follow article URLs, find og:image or first image</li>
+            <li><strong>AI Generation</strong> — Generate with Unsloth FLUX2 or DiffusionBee FLUX.1 as fallback</li>
+        </ol>
+
+        <h3>4.2 AI Image Models <span class="badge badge--new">CONFIGURED</span></h3>
+        <table class="table">
+            <tr><th>Model</th><th>Service</th><th>Quality</th><th>Status</th></tr>
+            <tr><td>FLUX.1-dev</td><td>DiffusionBee</td><td>★★★★★</td><td>Available (13GB, GUI required)</td></tr>
+            <tr><td>FLUX.1-schnell</td><td>DiffusionBee</td><td>★★★★</td><td>Available (13GB, GUI required)</td></tr>
+            <tr><td>FLUX.2-klein-4B</td><td>DiffusionBee</td><td>★★★★★</td><td>Available (7.4GB)</td></tr>
+            <tr><td>flux2-dev</td><td>Unsloth Studio</td><td>★★★★★</td><td>Requires API key setup</td></tr>
         </table>
 
-        <h2>API Token Management</h2>
-        <p>NewsAPI.ai provides 2,000 free tokens/month. The platform implements a 12-hour cache that reduces API calls by approximately 95%. Each fetch cycle uses ~120,000 tokens but runs only twice daily via cache, resulting in approximately 240,000 tokens/day usage — well within limits when combined with RSS feeds.</p>
-
-        <h2>Content Coverage</h2>
-        <table>
-            <thead><tr><th>Category</th><th>Articles</th><th>Languages</th></tr></thead>
-            <tbody>
-                <tr><td>Banking & Finance</td><td>45+</td><td>EN, AR</td></tr>
-                <tr><td>Technology</td><td>30+</td><td>EN, AR</td></tr>
-                <tr><td>Politics & Government</td><td>40+</td><td>EN, AR</td></tr>
-                <tr><td>Travel & Tourism</td><td>25+</td><td>EN</td></tr>
-                <tr><td>Sports</td><td>20+</td><td>EN</td></tr>
-                <tr><td>General News</td><td>70+</td><td>EN, AR</td></tr>
-            </tbody>
+        <h3>4.3 Current Coverage</h3>
+        <table class="table">
+            <tr><th>Image Type</th><th>Count</th><th>Source</th></tr>
+            <tr><td>Real images (JPG/PNG)</td><td>155</td><td>RSS feeds, article scraping</td></tr>
+            <tr><td>External URLs</td><td>25</td><td>Original RSS feed URLs</td></tr>
+            <tr><td>SVG placeholders</td><td>50</td><td>Category-colored, unique per article</td></tr>
+            <tr><td><strong>Total</strong></td><td><strong>230</strong></td><td><strong>100% coverage</strong></td></tr>
         </table>
 
-        <h2>Implementation Timeline</h2>
-        <div class="timeline">
-            <div class="tl-item"><h4>Phase 1: Foundation</h4><p>Newspaper layout, RTL support, database schema</p></div>
-            <div class="tl-item"><h4>Phase 2: News Pipeline</h4><p>NewsAPI.ai integration, RSS feeds, caching</p></div>
-            <div class="tl-item"><h4>Phase 3: Content Scraping</h4><p>Playwright integration, full article content</p></div>
-            <div class="tl-item"><h4>Phase 4: Image Pipeline</h4><p>Image downloading, AI generation fallback</p></div>
-            <div class="tl-item"><h4>Phase 5: E2E & Polish</h4><p>Screenshot testing, documentation, optimization</p></div>
-        </div>
+        <h2>5. Technical Architecture</h2>
 
-        <h2>Commands</h2>
-        <table>
-            <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
-            <tbody>
-                <tr><td><code>php artisan news:fetch-newsapi --days=7</code></td><td>Fetch from NewsAPI.ai (cached)</td></tr>
-                <tr><td><code>php artisan news:fetch-bahrain --days=7</code></td><td>Fetch from RSS feeds</td></tr>
-                <tr><td><code>php artisan news:scrape-content</code></td><td>Scrape full content with Playwright</td></tr>
-                <tr><td><code>php artisan news:process-images</code></td><td>Download/generate images</td></tr>
-                <tr><td><code>npx tsx scripts/take-screenshots.ts</code></td><td>Capture E2E screenshots</td></tr>
-            </tbody>
+        <h3>5.1 Tech Stack</h3>
+        <table class="table">
+            <tr><th>Layer</th><th>Technology</th><th>Version</th></tr>
+            <tr><td>Framework</td><td>Laravel</td><td>13</td></tr>
+            <tr><td>CMS</td><td>TypiCMS Core</td><td>17</td></tr>
+            <tr><td>PHP</td><td>PHP</td><td>8.5.9</td></tr>
+            <tr><td>Frontend</td><td>Vue.js + Bootstrap</td><td>3 + 5</td></tr>
+            <tr><td>Build</td><td>Vite + Bun</td><td>8 + 1</td></tr>
+            <tr><td>AI</td><td>DiffusionBee / Unsloth</td><td>FLUX.1 / FLUX.2</td></tr>
         </table>
 
-        <h2>Next Steps</h2>
-        <ul class="features">
-            <li>Deploy to production with nginx for better performance</li>
-            <li>Set up cron job for automatic news fetching every 12 hours</li>
-            <li>Add admin dashboard for content curation</li>
-            <li>Implement article detail pages with full body content</li>
-            <li>Add social sharing and newsletter integration</li>
-        </ul>
+        <h3>5.2 Commands</h3>
+        <pre><code># Fetch news from NewsAPI.ai (cached 12 hours)
+php artisan news:fetch-newsapi --days=7 --limit=100
 
-        <footer>
-            <p><strong>Jareeda</strong> — Bahrain News Platform</p>
-            <p>Technical Proposal — August 2026</p>
-            <p>Built with Laravel 13 • Vite 8 • Bootstrap 5 • Playwright</p>
-        </footer>
+# Fetch from RSS feeds
+php artisan news:fetch-bahrain --days=7 --limit=50
+
+# Scrape full content with Playwright
+php artisan news:scrape-content --limit=50
+
+# Process images (download → scrape → generate)
+php artisan news:process-images --limit=100
+
+# Ensure all articles have images
+php artisan news:ensure-images
+
+# Take E2E screenshots
+npx tsx scripts/take-screenshots.ts</code></pre>
+
+        <h2>6. Files Created/Modified</h2>
+        <table class="table">
+            <tr><th>File</th><th>Purpose</th></tr>
+            <tr><td>app/Models/News.php</td><td>News model with scopes</td></tr>
+            <tr><td>app/Console/Commands/FetchNewsApiAi.php</td><td>NewsAPI.ai fetcher with caching</td></tr>
+            <tr><td>app/Console/Commands/FetchBahrainNews.php</td><td>RSS feed fetcher</td></tr>
+            <tr><td>app/Console/Commands/ScrapeArticleContent.php</td><td>Playwright article scraper</td></tr>
+            <tr><td>app/Services/NewsImageService.php</td><td>Image pipeline service</td></tr>
+            <tr><td>app/Services/UnslothImageService.php</td><td>FLUX2 image generation</td></tr>
+            <tr><td>resources/views/public/pages/home.blade.php</td><td>Newspaper homepage</td></tr>
+            <tr><td>resources/scss/public/_newspaper.scss</td><td>Newspaper CSS with RTL</td></tr>
+            <tr><td>resources/scss/public/_fonts.scss</td><td>Google Fonts imports</td></tr>
+            <tr><td>database/migrations/2026_08_14_000001_create_news_table.php</td><td>News table migration</td></tr>
+            <tr><td>scripts/take-screenshots.ts</td><td>E2E screenshot script</td></tr>
+            <tr><td>tests/e2e/report/index.html</td><td>E2E HTML report</td></tr>
+        </table>
+
+        <h2>7. Next Steps</h2>
+        <ol>
+            <li>Set up Unsloth Studio API key for FLUX.2 image generation</li>
+            <li>Generate AI images for 50 articles with SVG placeholders</li>
+            <li>Add Schema.org structured data for SEO</li>
+            <li>Configure production deployment (nginx/Docker)</li>
+            <li>Add PHPUnit/Pest test suite</li>
+            <li>Set up cron for automatic news fetching</li>
+        </ol>
     </div>
 </body>
 </html>

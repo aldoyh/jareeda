@@ -24,7 +24,7 @@ class UnslothImageService
     {
         $this->apiEndpoint = config('unsloth.api_endpoint', 'http://localhost:8888');
         $this->apiKey = config('unsloth.api_key', '');
-        $this->model = config('unsloth.model', 'flux2-klein-4b');
+        $this->model = config('unsloth.model', 'flux2-dev');
         $this->storageDisk = config('unsloth.storage.disk', 'public');
         $this->storagePath = config('unsloth.storage.path', 'ai-generated');
     }
@@ -42,17 +42,16 @@ class UnslothImageService
     {
         $width = $options['width'] ?? config('unsloth.image.width', 1024);
         $height = $options['height'] ?? config('unsloth.image.height', 768);
-        $steps = $options['steps'] ?? config('unsloth.image.steps', 20);
-        $guidance = $options['guidance'] ?? config('unsloth.image.guidance', 7.5);
         $seed = $options['seed'] ?? config('unsloth.image.seed');
+
+        // Ensure the image model is loaded
+        $this->ensureModelLoaded();
 
         $payload = [
             'model' => $options['model'] ?? $this->model,
             'prompt' => $prompt,
             'n' => 1,
             'size' => "{$width}x{$height}",
-            'steps' => $steps,
-            'guidance' => $guidance,
         ];
 
         if ($seed !== null) {
@@ -80,6 +79,42 @@ class UnslothImageService
             'seed' => $imageData['seed'] ?? $seed,
             'revised_prompt' => $imageData['revised_prompt'] ?? $prompt,
         ];
+    }
+
+    /**
+     * Ensure the image model is loaded before generation.
+     */
+    protected function ensureModelLoaded(): void
+    {
+        $status = $this->makeRequest('/api/inference/images/status');
+
+        if (!empty($status['loaded'])) {
+            return;
+        }
+
+        // Load the model
+        $loadEndpoint = config('unsloth.load_endpoint', '/api/inference/images/load');
+        $ggufFilename = config('unsloth.gguf_filename', 'flux-2-klein-4b-Q4_K_M.gguf');
+
+        $this->makeRequest($loadEndpoint, [
+            'model_path' => $this->model,
+            'gguf_filename' => $ggufFilename,
+            'model_kind' => 'gguf',
+        ]);
+
+        // Wait for model to load (poll status)
+        $maxAttempts = 30;
+        $attempt = 0;
+        while ($attempt < $maxAttempts) {
+            sleep(2);
+            $status = $this->makeRequest('/api/inference/images/status');
+            if (!empty($status['loaded'])) {
+                return;
+            }
+            $attempt++;
+        }
+
+        throw new Exception('Failed to load image model within timeout');
     }
 
     /**
@@ -127,8 +162,13 @@ class UnslothImageService
     public function isHealthy(): bool
     {
         try {
-            $response = Http::timeout(config('unsloth.health_check.timeout', 5))
-                ->get("{$this->apiEndpoint}/v1/models");
+            $request = Http::timeout(config('unsloth.health_check.timeout', 5));
+
+            if ($this->apiKey) {
+                $request = $request->withHeader('Authorization', "Bearer {$this->apiKey}");
+            }
+
+            $response = $request->get("{$this->apiEndpoint}/v1/models");
 
             return $response->successful();
         } catch (Exception) {

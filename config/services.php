@@ -44,4 +44,14 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+
+    'newsapi' => [
+        'key' => env('NEWSAPI_KEY'),
+    ],
+
+    'unsloth' => [
+        'endpoint' => env('UNSLOTH_API_ENDPOINT', 'http://localhost:8888'),
+        'key' => env('UNSLOTH_API_KEY'),
+        'model' => env('UNSLOTH_MODEL', 'unsloth/FLUX.2-klein-4B-GGUF'),
+    ],
 ];

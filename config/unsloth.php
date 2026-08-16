@@ -51,7 +51,29 @@ return [
     |
     */
 
-    'model' => env('UNSLOTH_MODEL', 'flux2-klein-4b'),
+    'model' => env('UNSLOTH_MODEL', 'unsloth/FLUX.2-klein-4B-GGUF'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | GGUF Filename
+    |--------------------------------------------------------------------------
+    |
+    | The GGUF filename for image models. Required for GGUF model loading.
+    |
+    */
+
+    'gguf_filename' => env('UNSLOTH_GGUF_FILENAME', 'flux-2-klein-4b-Q4_K_M.gguf'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Model Load Endpoint
+    |--------------------------------------------------------------------------
+    |
+    | The endpoint to load image models. Unsloth Studio uses /api/inference/images/load.
+    |
+    */
+
+    'load_endpoint' => env('UNSLOTH_LOAD_ENDPOINT', '/api/inference/images/load'),
 
     /*
     |--------------------------------------------------------------------------
@@ -79,8 +101,8 @@ return [
     'image' => [
         'width' => env('UNSLOTH_IMAGE_WIDTH', 1024),
         'height' => env('UNSLOTH_IMAGE_HEIGHT', 768),
-        'steps' => env('UNSLOTH_IMAGE_STEPS', 20),
-        'guidance' => env('UNSLOTH_IMAGE_GUIDANCE', 7.5),
+        'steps' => env('UNSLOTH_IMAGE_STEPS', 30),
+        'guidance' => env('UNSLOTH_IMAGE_GUIDANCE', 4.0),
         'seed' => env('UNSLOTH_IMAGE_SEED', null), // null = random
     ],
 

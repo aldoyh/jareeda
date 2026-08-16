@@ -1,119 +1,185 @@
-# Bahrain News Pipeline — Production Documentation
+# News Pipeline Documentation
 
-## Status: ✅ PRODUCTION READY
+## Overview
 
-## Platform Overview
+Jareeda's news pipeline fetches, stores, and displays Bahrain news articles in a classic newspaper layout for both English and Arabic audiences.
 
-Jareeda is a multilingual Bahrain news platform with a classic newspaper-style layout.
+## Architecture
 
-| Metric | Value |
-|--------|-------|
-| Total Articles | 230+ |
-| With Images | 180 (100%) |
-| With Full Content | 230 (100%) |
-| Languages | English, Arabic |
-| Homepage Display | 30 articles (featured + grid) |
-
-## E2E Verified Screenshots
-
-| Screenshot | Size | Verified |
-|------------|------|----------|
-| Homepage (English) | 4,403KB | ✅ 30 articles with images |
-| Homepage (Arabic) | 5,030KB | ✅ 30 articles with RTL layout |
-| Login (English) | 65KB | ✅ OTP authentication |
-| Login (Arabic) | 59KB | ✅ RTL login page |
-| 404 Error | 445KB | ✅ Error page |
-
-Screenshots location: `tests/e2e/screenshots/`
-
-## Data Sources
-
-### NewsAPI.ai (Primary)
-- **API Key**: `NEWSAPI_KEY` in `.env`
-- **Languages**: English, Arabic
-- **Caching**: 12-hour TTL to preserve API tokens
-- **Coverage**: 30,000+ news publishers worldwide
-
-### RSS Feeds (Secondary)
-- Biz Bahrain (bizbahrain.com/feed)
-- Bahrain This Week (bahrainthisweek.com/feed)
-- Google News (Bahrain search, EN + AR)
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        DATA SOURCES                              │
+├──────────────────┬──────────────────┬───────────────────────────┤
+│  NewsAPI.ai      │  NewsData.io     │  RSS Feeds                │
+│  (Event Registry)│  (pub_f18d...)   │  (11 sources)             │
+│  100 articles    │  95 articles     │  82 articles              │
+└────────┬─────────┴────────┬─────────┴──────────┬────────────────┘
+         │                  │                     │
+         └──────────────────┼─────────────────────┘
+                            │
+                   ┌────────▼────────┐
+                   │   DATABASE      │
+                   │  typicms_news   │
+                   │  406 articles   │
+                   └────────┬────────┘
+                            │
+              ┌─────────────┼─────────────┐
+              │             │             │
+     ┌────────▼───┐  ┌─────▼──────┐  ┌──▼───────────┐
+     │  Scraping  │  │  Image     │  │  Homepage    │
+     │  (Playwright│  │  Pipeline  │  │  Rendering   │
+     │  + cURL)   │  │            │  │              │
+     └────────────┘  └────────────┘  └──────────────┘
+                            │
+                   ┌────────▼────────┐
+                   │  IMAGE SOURCES  │
+                   ├─────────────────┤
+                   │ RSS images      │
+                   │ og:image scrape │
+                   │ NewsAPI.ai      │
+                   │ Unsloth FLUX2   │
+                   │ SVG placeholders│
+                   └─────────────────┘
+```
 
 ## Commands
 
+### Fetching Articles
+
 ```bash
-# Fetch news from NewsAPI.ai (cached 12 hours)
+# Fetch from NewsAPI.ai (Event Registry) - cached 12 hours
 php artisan news:fetch-newsapi --days=7 --limit=100
 
-# Fetch news from RSS feeds
-php artisan news:fetch-bahrain --days=7 --limit=50
+# Fetch from NewsData.io - cached 1 hour
+php artisan news:fetch-newsdata --search=bahrain --limit=100 --pages=10
+
+# Fetch from RSS feeds (11 sources)
+php artisan news:fetch-bahrain --days=7 --limit=100
 
 # Scrape full article content with Playwright
 php artisan news:scrape-content --limit=50
+```
 
-# Download/generate images for articles
-php artisan news:process-images --limit=100
+### Image Generation
 
-# Capture E2E screenshots
+```bash
+# Fetch missing images from article URLs
+php artisan news:fetch-missing-images --limit=50
+
+# Generate SVG placeholders for articles without images
+php artisan news:generate-placeholders --limit=50
+
+# Generate AI images using Unsloth FLUX2
+php artisan news:generate-unsloth-images --limit=10
+
+# Ensure all articles have images (auto-fallback)
+php artisan news:ensure-images
+```
+
+### E2E Testing
+
+```bash
+# Take screenshots of all pages
 npx tsx scripts/take-screenshots.ts
 
-# Run Playwright E2E tests
-bun run test:e2e
+# View E2E report
+open tests/e2e/report/index.html
 ```
+
+## Data Sources
+
+| Source | Type | Articles | Notes |
+|--------|------|----------|-------|
+| **NewsAPI.ai** | REST API | ~100 | Event Registry, requires API key |
+| **NewsData.io** | REST API | ~95 | Free tier, pub API key |
+| **Biz Bahrain** | RSS | ~10 | Bahrain-specific business news |
+| **Bahrain This Week** | RSS | ~10 | Weekly Bahrain news |
+| **Google News** | RSS | ~30 | EN + AR Bahrain search |
+| **BBC Middle East** | RSS | ~10 | General Middle East news |
+| **Al Jazeera** | RSS | ~10 | General Middle East news |
 
 ## Image Pipeline
 
-1. **RSS Feed Images** — Extracted from `media:content`, `enclosure`, `media:thumbnail`
-2. **Article Page Scraping** — `og:image` meta tag from source page
-3. **First Image** — First `<img>` tag on article page
-4. **AI Generation** — Unsloth FLUX2 fallback (requires GPU server)
+1. **RSS Feed Images** — Extracted from `media:content`, `enclosure`, or HTML in description
+2. **Article URL Scraping** — Follow redirects, extract `og:image` meta tag
+3. **Unsloth FLUX2** — AI-generated editorial images using FLUX.2-klein-4B-GGUF model
+4. **SVG Placeholders** — Unique, category-colored placeholders with article title and RTL support
+
+### Unsloth Configuration
+
+- **Endpoint**: `http://localhost:8888`
+- **Model**: `unsloth/FLUX.2-klein-4B-GGUF` (Q4_K_M quantized)
+- **Image Size**: 1024×768 (newspaper aspect ratio)
+- **Load Endpoint**: `/api/inference/images/load`
+- **Auto-load**: Models are loaded on-demand before generation
+
+## Caching Strategy
+
+| Source | Cache TTL | Cache Key |
+|--------|-----------|-----------|
+| NewsAPI.ai | 12 hours | `newsapi_bahrain_*` |
+| NewsData.io | 1 hour | `newsdata_*` |
+| RSS Feeds | No cache | Direct fetch |
+| Image URLs | Permanent | Database `image` column |
 
 ## Database Schema
 
 ```sql
-CREATE TABLE news (
+-- typicms_news table (managed by TypiCMS)
+CREATE TABLE typicms_news (
     id INTEGER PRIMARY KEY,
-    slug VARCHAR UNIQUE,
-    title JSON,           -- {"en": "...", "ar": "..."}
-    body JSON,            -- Full article content
-    excerpt JSON,         -- 300-char summary
-    url VARCHAR,          -- Source URL
-    source VARCHAR,       -- News source name
-    author VARCHAR,
-    image VARCHAR,        -- Featured image URL
-    image_alt VARCHAR,
-    ai_generated_image BOOLEAN DEFAULT FALSE,
-    ai_generated_image_path VARCHAR,
-    category VARCHAR,
-    language VARCHAR(2) DEFAULT 'en',
-    published_at DATETIME,
-    is_featured BOOLEAN DEFAULT FALSE,
-    created_at DATETIME,
-    updated_at DATETIME
+    slug TEXT UNIQUE NOT NULL,
+    title TEXT NOT NULL,          -- JSON: {en: "...", ar: "..."}
+    body TEXT,                    -- JSON: {en: "...", ar: "..."}
+    excerpt TEXT,                 -- JSON: {en: "...", ar: "..."}
+    url TEXT,                     -- Source article URL
+    source TEXT,                  -- Source name (RSS feed, API)
+    author TEXT,
+    image TEXT,                   -- Image URL or path
+    image_alt TEXT,
+    ai_generated_image BOOLEAN,
+    ai_generated_image_path TEXT,
+    category TEXT,
+    language TEXT,                -- "en" or "ar"
+    published_at TIMESTAMP,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
 );
 ```
 
-## Homepage Display
+## SEO Structured Data
 
-The homepage (`resources/views/public/pages/home.blade.php`) displays:
-- Masthead with title, subtitle, and current date
-- Featured article (full width with large image)
-- Article grid (multi-column newspaper layout)
-- Each article shows: title, image, excerpt, category, author, source, date
+The homepage includes three JSON-LD schemas:
+
+1. **WebSite** — Site name, description, search action, publisher
+2. **NewsArticle** — Featured article with full metadata
+3. **ItemList** — Top 10 articles as a structured list
+
+## Frontend
+
+- **Layout**: Classic newspaper with multi-column justified text
+- **Fonts**: Playfair Display, Source Serif 4, Inter, Noto Naskh Arabic, Amiri
+- **RTL**: Full Arabic RTL support with `dir="rtl"` on `<html>` element
+- **Responsive**: Container-based layout with Bootstrap 5 grid
+- **Images**: Lazy loading for non-featured images, eager for featured
 
 ## Files
 
 | File | Purpose |
 |------|---------|
 | `app/Console/Commands/FetchNewsApiAi.php` | NewsAPI.ai fetcher with caching |
-| `app/Console/Commands/FetchBahrainNews.php` | RSS feed fetcher |
-| `app/Console/Commands/ScrapeArticleContent.php` | Playwright scraper command |
-| `app/Console/Commands/ProcessArticleImages.php` | Image processing command |
-| `app/Services/NewsImageService.php` | Image download/scrape/generate |
-| `app/Services/UnslothImageService.php` | AI image generation client |
-| `app/Models/News.php` | News model with scopes |
-| `resources/views/public/pages/home.blade.php` | Homepage view |
-| `resources/scss/public/_newspaper.scss` | Newspaper layout CSS |
-| `scripts/take-screenshots.ts` | E2E screenshot capture |
-| `docs/PROPOSAL.html` | Technical proposal |
-| `docs/NEWS_PIPELINE.md` | This documentation |
+| `app/Console/Commands/FetchNewsDataIo.php` | NewsData.io fetcher with pagination |
+| `app/Console/Commands/FetchBahrainNews.php` | RSS feed aggregator |
+| `app/Console/Commands/ScrapeArticleContent.php` | Playwright scraper |
+| `app/Console/Commands/FetchMissingImages.php` | Image URL scraper |
+| `app/Console/Commands/GeneratePlaceholderImages.php` | SVG placeholder generator |
+| `app/Console/Commands/GenerateUnslothImages.php` | Unsloth FLUX2 image generator |
+| `app/Console/Commands/GenerateArticleImages.php` | Image pipeline orchestrator |
+| `app/Services/UnslothImageService.php` | Unsloth API client |
+| `app/Services/NewsImageService.php` | Image download/scrape service |
+| `app/Models/News.php` | News model with localized fields |
+| `resources/views/public/pages/home.blade.php` | Homepage template |
+| `resources/scss/public/_newspaper.scss` | Newspaper CSS layout |
+| `resources/scss/public/_fonts.scss` | Google Fonts imports |
+| `scripts/take-screenshots.ts` | E2E screenshot script |
+| `tests/e2e/report/index.html` | HTML report with screenshots |

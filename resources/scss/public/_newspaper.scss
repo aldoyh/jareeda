@@ -16,6 +16,13 @@ $newspaper-caption-font: 'Inter', -apple-system, sans-serif;
 $newspaper-arabic-headline-font: 'Noto Naskh Arabic', 'Amiri', serif;
 $newspaper-arabic-body-font: 'Noto Naskh Arabic', 'Amiri', serif;
 
+// Newspaper section wrapper
+.newspaper-section {
+    padding: 3rem 0;
+    border-top: 3px double var(--bs-gray-900);
+    margin-top: 2rem;
+}
+
 // Main newspaper container
 .newspaper {
     // Multi-column layout
@@ -56,8 +63,39 @@ body-ar .newspaper,
     font-family: $newspaper-arabic-body-font;
     text-align: justify;
     direction: rtl;
-    // Arabic justification uses word spacing by default
-    // For better Arabic justification, consider kashida plugin
+}
+
+// RTL masthead
+[dir="rtl"] .newspaper-masthead__title,
+[lang="ar"] .newspaper-masthead__title {
+    font-family: $newspaper-arabic-headline-font;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+// RTL featured article
+[dir="rtl"] .newspaper-featured__title,
+[lang="ar"] .newspaper-featured__title {
+    font-family: $newspaper-arabic-headline-font;
+}
+
+// RTL article cards
+[dir="rtl"] .newspaper-article__title,
+[lang="ar"] .newspaper-article__title {
+    font-family: $newspaper-arabic-headline-font;
+}
+
+// RTL article meta — flip the dot separator order
+[dir="rtl"] .newspaper-article__meta,
+[lang="ar"] .newspaper-article__meta {
+    direction: rtl;
+    unicode-bidi: embed;
+}
+
+// RTL column direction — columns flow right-to-left
+[dir="rtl"] .newspaper {
+    direction: rtl;
+    unicode-bidi: isolate;
 }
 
 // Newspaper header (masthead)
@@ -328,5 +366,63 @@ body-ar .newspaper,
 
     .newspaper-article {
         border-bottom: 2px solid #000;
+    }
+}
+
+// Newspaper Pagination
+.newspaper-pagination {
+    margin-top: 3rem;
+    padding: 2rem 0;
+    border-top: 2px solid var(--bs-gray-900);
+    text-align: center;
+
+    .pagination {
+        justify-content: center;
+        gap: 0.25rem;
+        margin: 0;
+        padding: 0;
+
+        .page-item {
+            .page-link {
+                font-family: $font-family-serif;
+                font-weight: 700;
+                font-size: 0.875rem;
+                min-width: 2.5rem;
+                height: 2.5rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid var(--bs-gray-400);
+                border-radius: 0;
+                color: var(--bs-gray-900);
+                background: var(--bs-white);
+                text-decoration: none;
+                transition: all 0.15s ease;
+
+                &:hover {
+                    background: var(--bs-gray-100);
+                    color: var(--bs-gray-900);
+                }
+            }
+
+            &.active .page-link {
+                background: var(--bs-gray-900);
+                color: var(--bs-white);
+                border-color: var(--bs-gray-900);
+            }
+
+            &.disabled .page-link {
+                color: var(--bs-gray-400);
+                background: transparent;
+                border-color: var(--bs-gray-300);
+            }
+        }
+    }
+
+    // RTL pagination
+    [dir="rtl"] & .pagination {
+        .page-item .page-link {
+            font-family: $font-family-arabic;
+        }
     }
 }
