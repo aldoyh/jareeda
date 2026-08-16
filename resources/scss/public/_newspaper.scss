@@ -426,3 +426,123 @@ body-ar .newspaper,
         }
     }
 }
+
+// ============================================
+// Dark Mode Overrides for Newspaper Layout
+// ============================================
+
+[data-theme="dark"] .newspaper-section {
+    border-top-color: var(--dm-newspaper-rule);
+}
+
+[data-theme="dark"] .newspaper {
+    column-rule-color: var(--dm-newspaper-rule);
+}
+
+[data-theme="dark"] .newspaper-masthead {
+    border-bottom-color: var(--dm-newspaper-rule);
+
+    &__title {
+        color: var(--dm-newspaper-headline);
+    }
+
+    &__subtitle {
+        color: var(--dm-newspaper-caption);
+    }
+
+    &__date {
+        color: var(--dm-newspaper-caption);
+    }
+
+    &__rule {
+        border-top-color: var(--dm-newspaper-rule);
+    }
+}
+
+[data-theme="dark"] .newspaper-featured {
+    background: var(--dm-newspaper-featured-bg);
+    border-color: var(--dm-newspaper-rule);
+
+    &__title {
+        color: var(--dm-newspaper-headline);
+    }
+
+    &__excerpt {
+        color: var(--dm-newspaper-body);
+    }
+
+    &__meta {
+        color: var(--dm-newspaper-caption);
+    }
+
+    &__source {
+        color: var(--dm-newspaper-caption);
+    }
+
+    &__image {
+        border-color: var(--dm-newspaper-rule);
+    }
+}
+
+[data-theme="dark"] .newspaper-article {
+    background: var(--dm-card-bg);
+    border-color: var(--dm-newspaper-rule);
+    break-inside: avoid;
+    page-break-inside: avoid;
+    box-shadow: var(--dm-card-shadow);
+
+    &__image {
+        border-color: var(--dm-newspaper-rule);
+    }
+
+    &__title {
+        color: var(--dm-newspaper-headline);
+    }
+
+    &__excerpt {
+        color: var(--dm-newspaper-body);
+    }
+
+    &__meta {
+        color: var(--dm-newspaper-caption);
+    }
+
+    &__source {
+        color: var(--dm-newspaper-caption);
+    }
+}
+
+[data-theme="dark"] .newspaper-grid {
+    &__item {
+        background: var(--dm-card-bg);
+        border-color: var(--dm-newspaper-rule);
+        box-shadow: var(--dm-card-shadow);
+    }
+}
+
+[data-theme="dark"] .newspaper-pagination {
+    .pagination {
+        .page-item {
+            .page-link {
+                color: var(--dm-text-secondary);
+                border-color: var(--dm-newspaper-rule);
+
+                &:hover {
+                    background: var(--dm-bg-tertiary);
+                    color: var(--dm-text);
+                }
+            }
+
+            &.active .page-link {
+                background: var(--dm-accent);
+                color: #ffffff;
+                border-color: var(--dm-accent);
+            }
+
+            &.disabled .page-link {
+                color: var(--dm-text-muted);
+                border-color: var(--dm-border);
+            }
+        }
+    }
+}

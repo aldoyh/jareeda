@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="50%" style="stop-color:#16213e"/>
+      <stop offset="100%" style="stop-color:#0f3460"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#eaeaea" stroke-width="0.3" opacity="0.1"/>
+    </pattern>
+    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="1" fill="#eaeaea" opacity="0.08"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <rect width="1920" height="1080" fill="url(#grid)"/>
+  <rect width="1920" height="1080" fill="url(#dots)"/>
+
+  <!-- Decorative border -->
+  <rect x="30" y="30" width="1860" height="1020" fill="none" stroke="#eaeaea" stroke-width="1" opacity="0.2"/>
+  <rect x="40" y="40" width="1840" height="1000" fill="none" stroke="#eaeaea" stroke-width="0.5" opacity="0.15"/>
+
+  <!-- Top decorative line -->
+  <line x1="60" y1="80" x2="1860" y2="80" stroke="#e94560" stroke-width="2" opacity="0.8"/>
+  <line x1="60" y1="85" x2="1860" y2="85" stroke="#eaeaea" stroke-width="0.5" opacity="0.3"/>
+
+  <!-- Main title -->
+  <text x="960" y="480" text-anchor="middle" font-family="Georgia, 'Playfair Display', serif" font-size="129" font-weight="900" fill="#eaeaea" letter-spacing="0.15em">JAREEDA</text>
+
+  <!-- Arabic subtitle -->
+  <text x="960" y="550" text-anchor="middle" font-family="'Noto Naskh Arabic', 'Amiri', serif" font-size="43" fill="#eaeaea" opacity="0.7">جريدة - أخبار البحرين</text>
+
+  <!-- Date line -->
+  <text x="960" y="590" text-anchor="middle" font-family="'Inter', sans-serif" font-size="19" fill="#eaeaea" opacity="0.5" letter-spacing="0.2em">Sunday, August 16, 2026</text>
+
+  <!-- Bottom decorative line -->
+  <line x1="60" y1="1000" x2="1860" y2="1000" stroke="#eaeaea" stroke-width="0.5" opacity="0.3"/>
+  <line x1="60" y1="1005" x2="1860" y2="1005" stroke="#e94560" stroke-width="2" opacity="0.8"/>
+
+  <!-- Corner decorations -->
+  <path d="M 50 50 L 70 50 L 70 55 L 55 55 L 55 70 L 50 70 Z" fill="#e94560" opacity="0.6"/>
+  <path d="M 1870 50 L 1850 50 L 1850 55 L 1865 55 L 1865 70 L 1870 70 Z" fill="#e94560" opacity="0.6"/>
+  <path d="M 50 1030 L 70 1030 L 70 1025 L 55 1025 L 55 1010 L 50 1010 Z" fill="#e94560" opacity="0.6"/>
+  <path d="M 1870 1030 L 1850 1030 L 1850 1025 L 1865 1025 L 1865 1010 L 1870 1010 Z" fill="#e94560" opacity="0.6"/>
+
+  <!-- Edition text -->
+  <text x="960" y="1035" text-anchor="middle" font-family="'Inter', sans-serif" font-size="12" fill="#eaeaea" opacity="0.35" letter-spacing="0.3em">DIGITAL EDITION</text>
+</svg>

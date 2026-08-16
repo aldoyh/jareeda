@@ -17,10 +17,12 @@ window.Swiper = Swiper;
 import enableAnchorTop from './public/anchor-top.ts';
 import enableNavigation from './public/navigation.ts';
 import enablePhotoSwipeLightbox from './public/photo-swipe-lightbox.ts';
+import { initDarkMode } from './public/dark-mode.ts';
 
 enablePhotoSwipeLightbox();
 enableAnchorTop();
 enableNavigation();
+initDarkMode();
 
 import.meta.glob(['../images/**']);
 
