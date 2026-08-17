@@ -1,141 +1,137 @@
 # TypiCMS
 
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/TypiCMS/Base/blob/master/LICENCE.md)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Larastan](https://img.shields.io/badge/PHPStan-level%205-brightgreen.svg?style=flat-square)](https://github.com/nunomaduro/larastan)
 
-TypiCMS is a modular multilingual content management system built with [Laravel](https://laravel.com). Out of the box you can manage pages, events, news, places, menus, translations, etc.
+TypiCMS is a modular multilingual content management system built with [Laravel](https://laravel.com). Out of the box you can manage pages, events, news, places, menus, translations, and more.
 
-![TypiCMS screenshot](https://typicms.org/uploads/files/typicms-screenshot.png?4)
+![TypiCMS screenshot](https://typicms.org/uploads/files/typicms-screenshot.png?2)
 
 ## Table of contents
 
--   [Features](#features)
--   [Requirements](#requirements)
--   [Installation](#installation)
-    -   [Assets](#assets)
-    -   [Locales configuration](#locales-configuration)
-    -   [Installation of a module](#installation-of-a-module)
--   [Available modules](#available-modules)
-    -   [Pages](#pages)
-    -   [Menus](#menus)
-    -   [Projects](#projects)
-    -   [Categories](#categories)
-    -   [Tags](#tags)
-    -   [Events](#events)
-    -   [News](#news)
-    -   [Contacts](#contacts)
-    -   [Partners](#partners)
-    -   [Files](#files)
-    -   [Users and roles](#users-and-roles)
-    -   [Blocks](#blocks)
-    -   [Translations](#translations)
-    -   [Sitemap](#sitemap)
-    -   [Settings](#settings)
-    -   [History](#history)
--   [Facades](#facades)
--   [Artisan commands](#artisan-commands)
--   [Roadmap](#roadmap)
--   [Change log](#change-log)
--   [Contributing](#contributing)
--   [Credits](#credits)
--   [Licence](#licence)
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+  - [Assets](#assets)
+  - [Locales configuration](#locales-configuration)
+  - [Installation of a module](#installation-of-a-module)
+  - [Module scaffolding](#module-scaffolding)
+- [Available modules](#available-modules)
+  - [Pages](#pages)
+  - [Menus](#menus)
+  - [Projects](#projects)
+  - [Tags](#tags)
+  - [Events](#events)
+  - [News](#news)
+  - [Contacts](#contacts)
+  - [Partners](#partners)
+  - [Files](#files)
+  - [Users and roles](#users-and-roles)
+  - [Blocks](#blocks)
+  - [Translations](#translations)
+  - [Sitemap](#sitemap)
+  - [llms.txt](#llmstxt)
+  - [JSON-LD](#json-ld)
+  - [Markdown responses](#markdown-responses)
+  - [Settings](#settings)
+  - [History](#history)
+- [Artisan commands](#artisan-commands)
+- [Change log](#change-log)
+- [Contributing](#contributing)
+- [Credits](#credits)
+- [Licence](#licence)
 
 ## Features
 
+- **Multilingual** — full support for multiple languages with locale-prefixed URLs
+- **Modular** — install only the modules you need; publish and customize any of them
+- **Dark mode** — the admin panel supports both light and dark themes
+- **Rich text editing** — [TipTap](https://tiptap.dev) editor with support for floating images, tables, YouTube embeds, iframes, and an HTML source view
+- **Passkey and OTP authentication** — secure, passwordless login options for admin users
+- **Page sections** — pages can have multiple content sections, each with its own template
+- **Nestable pages and menus** — drag-and-drop reordering with automatic URI generation
+- **File management** — upload and organize images, documents, and folders with [Uppy](https://uppy.io), image cropping with [Cropper.js](https://fengyuanchen.github.io/cropperjs/), and SVG sanitization on upload
+- **Roles and permissions** — fine-grained access control via [spatie/laravel-permission](https://github.com/spatie/laravel-permission)
+- **History log** — create, update, delete, online, and offline events are logged and shown in the dashboard
+- **SEO friendly** — automatic `sitemap.xml`, locale-aware `llms.txt`, and a reusable `<x-json-ld>` Blade component for structured data
+- **Markdown responses** — every public page can be served as Markdown by appending `.md` to the URL or sending an `Accept: text/markdown` header
+- **Vue.js 3** frontend powered by [Vite](https://vitejs.dev) and written in TypeScript
+
 ### URLs
 
-These kind of URLs are managed by the CMS:
+The CMS manages the following URL patterns:
 
 **Modules:**
 
--   /en/events/slug-in-english
--   /fr/evenements/slug-en-francais
+- /en/events/slug-in-english
+- /fr/evenements/slug-en-francais
 
 **Pages:**
 
--   /en/parent-pages-slug-en/subpage-slug-en/page-slug-en
--   /fr/parent-pages-slug-fr/subpage-slug-fr/page-slug-fr
+- /en/parent-page-slug/subpage-slug/page-slug
+- /fr/slug-parent/slug-sous-page/slug-page
 
 ## Requirements
 
--   PHP >= 7.2
--   MySQL 5.7.8
--   BCMath PHP Extension
--   Ctype PHP Extension
--   JSON PHP Extension
--   Mbstring PHP Extension
--   OpenSSL PHP Extension
--   PDO PHP Extension
--   Tokenizer PHP Extension
--   XML PHP Extension
+- PHP 8.4+
+- MySQL, MariaDB, or PostgreSQL
+
+For all server requirements, see the [Laravel deployment documentation](https://laravel.com/docs/master/deployment#server-requirements).
 
 ## Installation
 
-First install [Composer](https://getcomposer.org)
+```
+composer create-project typicms/typicms mywebsite
+```
 
-1. Create a new project
+---
 
-    ```
-    composer create-project typicms/base mywebsite
-    ```
-
-2. Enter the newly created folder
-
-    ```
-    cd mywebsite
-    ```
-
-3. Migration of the database, seeding, user creation, npm packages installation and directory permissions.
-
-    ```
-    php artisan typicms:install
-    ```
-
-Note: if you use MariaDB, set 'mariadb' to true in config/typicms.php
-
-Go to http://mywebsite.test/admin and log in.
+Go to https://mywebsite.test/admin and log in using a password.
 
 ### Assets
 
-Assets are bundled with [Vite](https://laravel.com/docs/master/vite).
-In order to work on assets, you can install [Bun](https://bun.com), then go to your website folder and run these commands:
+Assets are bundled with [Vite](https://laravel.com/docs/master/vite). Install [Bun](https://bun.sh), then run:
 
-1. Install npm packages (in directory **node_modules**)
+1. Install npm packages:
 
     ```
     bun install
     ```
 
-2. Compile admin and public assets
+2. Start the development server:
 
     ```
     bun run dev
     ```
 
+3. Build for production:
+
+    ```
+    bun run prod
+    ```
+
 ### Locales configuration
 
-1. Set the locales in config/typicms.php, the first key of this array is the main locale and should be the same as the locale defined in config/app.php.
-2. Set main_locale_in_url in config/typicms.php to true or false.
+1. Set the locales in `config/typicms.php`. The first key of this array is the main locale and must match the locale defined in `config/app.php`.
+2. Set `main_locale_in_url` in `config/typicms.php` to `true` or `false` depending on whether you want the main locale to appear in the URL.
 
 ### Installation of a module
 
-This example is for the News module. After these steps, the module will appear in the sidebar of the back office.
-If you need to customize it, you can [publish it](#publish-a-module)!
+The following example installs the News module. After these steps, the module will appear in the admin sidebar.
 
-1. Install a module with Composer
+1. Install the module with Composer:
 
     ```
     composer require typicms/news
     ```
 
-2. Add `TypiCMS\Modules\News\Providers\ModuleServiceProvider::class,` to **config/app.php**, before `TypiCMS\Modules\Core\Providers\ModuleServiceProvider::class,`
-3. Publish the views and migrations
+2. Publish the views and migrations:
 
     ```
     php artisan vendor:publish
     ```
 
-4. Migrate the database
+3. Run the database migration:
 
     ```
     php artisan migrate
@@ -143,17 +139,17 @@ If you need to customize it, you can [publish it](#publish-a-module)!
 
 ### Module scaffolding
 
-Let’s create a module called Cats.
+To generate a new custom module called Cats:
 
-1. Create the module with artisan:
+1. Create the module:
 
     ```
     php artisan typicms:create cats
     ```
 
-2. The module is in **/Modules/Cats**, you can customize it
-3. Add `TypiCMS\Modules\Cats\Providers\ModuleServiceProvider::class,` to **config/app.php**, before `TypiCMS\Modules\Core\Providers\ModuleServiceProvider::class,`
-4. Migrate the database
+2. The module is created in `/Modules/Cats`. Customize it as needed.
+3. Add `TypiCMS\Modules\Cats\Providers\ModuleServiceProvider::class,` to `bootstrap/providers.php`, in the _TypiCMS Modules Service Providers_ section.
+4. Run the migration:
 
     ```
     php artisan migrate
@@ -161,28 +157,27 @@ Let’s create a module called Cats.
 
 ## Available modules
 
-Each module can be [published](#publish-a-module).
+Each module can be [published](#publish-a-module) to be tracked by git and customized locally.
 
 ### Pages
 
-Pages are nestable with a drag and drop, on drop, URIs are generated and saved in the database.
-Each translation of a page has its own route.
-A page can be linked to a module.
-A page can have multiple sections.
+Pages are nestable with drag and drop. On a drop, URIs are regenerated and saved in the database. Each translation of a page has its own route. A page can be linked to a module and can have multiple sections, each using its own template.
+
+The admin panel includes a searchable pages tree with keyboard-accessible expand/collapse controls.
 
 ### Menus
 
-Each menu has nestable entries. One entry can be linked to a page or URL.
-You can return a HTML formated menu with `Menus::render('menuname')` or `@menu('menuname')`.
+Each menu has nestable entries. An entry can link to a page or a URL, and can optionally link to a specific section of a page.
+
+Render an HTML menu in a Blade file with `@menu('menuname')`.
 
 ### Projects
 
-Projects have categories, projects URLs follows this pattern: /en/projects/category-slug/project-slug
+Projects have categories. Project URLs follow this pattern: `/en/projects/category-slug/project-slug`.
 
 ### Tags
 
-Tags are linked to projects and use the [Selectize](https://brianreavis.github.io/selectize.js/) plugin.
-The tags module has many to many polymorphic relations so a tag can be easily linked to any module.
+Tags support polymorphic many-to-many relations, so they can be linked to any module. The tag input uses [Tom Select](https://tom-select.js.org).
 
 ### Events
 
@@ -194,88 +189,103 @@ News module.
 
 ### Contacts
 
-Frontend contact form and admin side records management.
+Frontend contact form with admin-side records management. Notifications are sent to the visitor and the webmaster.
 
 ### Partners
 
-A partner has a logo, website URL, title and body content.
+A partner has a logo, website URL, title, and body content.
 
 ### Files
 
-The files module allows you to upload and organize images, documents and folders. It works with [DropzoneJS](http://www.dropzonejs.com) for the uploading proccess.
-Thumbnails are generated on the fly thanks to [Croppa](https://github.com/BKWLD/croppa).
+The file manager lets you upload and organize images, documents, and folders. File uploads use [Uppy](https://uppy.io) with drag-and-drop support and a compression step before upload. Images can be cropped using [Cropper.js](https://fengyuanchen.github.io/cropperjs/). SVG files are sanitized on upload. Images can be swapped in place from the file manager.
 
-If you want to store the original images on a storage service such as Amazon s3 and your cropped images on the local disk, set `FILESYSTEM_DRIVER=s3` in your **.env** file and in **config/croppa.php** set `'src_dir' => 'filesystem.default.driver'` and `'crops_dir' => storage_path('app/public')`.
+To store original images on a remote service such as Amazon S3 while serving cropped images from local disk, set `FILESYSTEM_DRIVER=s3` in your `.env` file and configure `croppa.php` accordingly.
 
 ### Users and roles
 
-User registration can be enabled through the settings panel (/admin/settings).
-Roles and Permissions are managed with [spatie/laravel-permission](https://github.com/spatie/laravel-permission).
+Admins can authenticate with a passkey or a one-time password in addition to a standard password. User registration can be enabled in the settings panel (`/admin/settings`). Roles and permissions are managed with [spatie/laravel-permission](https://github.com/spatie/laravel-permission). Admins can impersonate users.
 
 ### Blocks
 
-Blocks are useful to display custom content in your views.
-You can display the content of a block with `Blocks::render('blockname')` or `@block('blockname')`.
+Blocks let you display custom content in your views.
+
+Render a block in Blade with `Blocks::render('blockname')` or `@block('blockname')`.
 
 ### Translations
 
-Translations can be stored in the database through the admin panel (/admin/translations).
+Translations can be managed in the database via the admin panel (`/admin/translations`).
 
-You can get a translation from the database with the standard Laravel functions: `__('Key')`, `trans('Key')` or `@lang('Key')`.
+Retrieve a translation using the standard Laravel helpers: `__('Key')`, `trans('Key')`, or `@lang('Key')`.
 
 ### Sitemap
 
-A sitemap is generated by reading all pages available in your project. The URL is /sitemap.xml.
+A sitemap is generated automatically from all published pages. It is available at `/sitemap.xml`.
+
+### llms.txt
+
+A locale-aware [`llms.txt`](https://llmstxt.org) file is generated automatically and served at `/llms.txt`. It lists published pages and module content so that LLM-based agents can discover and index the site.
+
+### JSON-LD
+
+The Pages, News, Events, Places, and Partners modules ship with [Schema.org](https://schema.org) structured data via the reusable `<x-core::json-ld>` Blade component. Use it in your own views to add structured data for any model:
+
+```blade
+<x-core::json-ld :schema="[
+    '@context' => 'https://schema.org',
+    '@type' => 'Article',
+    'headline' => $model->title,
+]" />
+```
+
+### Markdown responses
+
+Every public route can be served as Markdown thanks to [spatie/laravel-markdown-response](https://github.com/spatie/laravel-markdown-response). Append `.md` to any URL (e.g. `/en/about.md`) or send an `Accept: text/markdown` header, and the same controller will return a Markdown representation of the page — handy for LLM consumption and feeding `llms.txt` clients.
 
 ### Settings
 
-Change the website title, logo, and other options in the settings panel.
+Manage the website title, baseline, description, contact details (email, phone, address), logo, and other global options in the settings panel (`/admin/settings`).
 
 ### History
 
-_created_, _updated_, _deleted_, _online_ and _offline_ actions are logged in database.
-Latest records are displayed in the back office’s dashboard.
-
-## Facades
-
-Each module has a [facade](https://laravel.com/docs/master/facades#main-content) that gives you access to the model, you can call for example `News::latest(3)` to get the three latest news.
-Check available methods in each module’s models.
+Create, update, delete, online, and offline events are logged in the database. The most recent records are shown on the back-office dashboard.
 
 ## Artisan commands
 
-Commands are located in **/vendor/typicms/core/src/Commands**
-
-### Installation of TypiCMS
+### Install TypiCMS
 
 ```
 php artisan typicms:install
 ```
 
-### Initial migration and seed
+### Run the initial migration and seed
 
 ```
 php artisan typicms:database
 ```
 
-This command is triggered by `typicms:install`
+This command is called automatically by `typicms:install`.
+
+### Create a superuser
+
+```
+php artisan typicms:user
+```
 
 ### Publish a module
 
-If you want to modify a module, for example to add some fields or a relation, you have to publish it by running:
+To customize a module — for example, to add fields or a relation — publish it:
 
 ```
 php artisan typicms:publish <modulename>
 ```
 
-The module is now located in the **/Modules** directory.
+This will:
 
-These steps will be executed:
+1. Publish the module's views and migrations.
+2. Copy the module source to `/Modules/<Modulename>`.
+3. Remove the Composer package with `composer remove typicms/<modulename>`.
 
-1. Publishing of views and migrations for Pages module.
-2. Copying of everything excepted views and migrations from **/vendor/typicms/pages/src** to **/Modules/Pages**.
-3. Running `composer remove typicms/pages`.
-
-When a module is published, it will be tracked by git and you will be able to make changes in **/Modules/Modulename** directory without loosing changes when running `composer update`.
+Once published, the module lives in `/Modules/<Modulename>` and is tracked by git, so changes are preserved across `composer update` runs.
 
 ## Changelog
 
@@ -287,9 +297,9 @@ Please see [CONTRIBUTING](https://github.com/TypiCMS/Base/blob/master/CONTRIBUTI
 
 ## Credits
 
--   [Samuel De Backer](https://github.com/sdebacker)
--   [All contributors](https://github.com/TypiCMS/Base/graphs/contributors)
+- [Samuel De Backer](https://github.com/sdebacker)
+- [All contributors](https://github.com/TypiCMS/Base/graphs/contributors)
 
 ## License
 
-TypiCMS is an open-source software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+TypiCMS is open-source software licensed under the [MIT license](http://opensource.org/licenses/MIT).

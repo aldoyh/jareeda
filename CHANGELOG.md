@@ -2,6 +2,97 @@
 
 All notable changes to TypiCMS will be documented in this file.
 
+## 17.0.0 - 2026-05-01
+
+### Changed
+
+- Laravel 13
+- PHP 8.4 required
+- Base model replaced by traits
+- Presenter pattern replaced by presenter traits
+- JSON-LD structured data migrated to `<x-core::json-ld>` Blade component for News, Events, Places, Partners, and Pages
+- Croppa 8
+- Cropper.js upgraded from v1 to v2 (Web Components API); `ImageCropper.vue` rewritten
+- Admin Blade layout migrated from `@extends('admin::core.master')` to the component-based `<x-layouts.admin>`
+- Public Blade layout migrated from `@extends('public::core.master')` to the component-based `<x-layouts.public>`
+- Contact form notifications now sent to users holding the `receive contact notifications` permission instead of a single hardcoded address
+- Event registration notifications now sent to users holding the `receive event registration notifications` permission instead of a single hardcoded address
+- Vendor publish tags split by asset type: `typicms-images` (shared), `typicms-fonts`, `typicms-admin-scss`, `typicms-public-scss`, `typicms-admin-js`, `typicms-public-js` (aggregate `typicms-resources` / `typicms-admin-resources` / `typicms-public-resources` preserved)
+- Security fixes
+- View composers removed: use app()->getLocale() in place of $lang and websiteTitle() in place of $websiteTitle
+
+### Added
+
+- spatie/laravel-responsecache for response caching on public routes
+- spatie/laravel-markdown-response middleware on public routes
+- `llms.txt` route with pages and module content
+- PHPStan level 8 configuration with Larastan
+- Rector configuration for code modernization
+- Test (with Pest)
+
+### Removed
+
+- genealabs/laravel-model-caching
+- Laracasts/Presenter package
+- `typicms.webmaster_email` config and `WEBMASTER_EMAIL` env variable
+
+## 16.1.8 - 2026-02-21
+
+### Changed
+
+- SVG files are now sanitized during upload. Run `composer require enshrined/svg-sanitize`
+
+## 16.1.0 - 2026-01-14
+
+### Added
+
+- Default section template support.
+- Page section edit button for quick editing.
+- Display tagged items in tag admin form.
+- Show locale indicator in TipTap editor label.
+- Show template name in section list.
+- TipTap editor: floating images support.
+
+### Changed
+
+- Section form displayed on two columns.
+- Template field is now required in section form.
+- Refactored slug generation and uniqueness checks.
+- Improved form validation and page selection in link dialog.
+- Enhanced filename normalization in file uploads.
+- Improved error handling in item deletion.
+- Stricter code across all packages.
+- Removed v-html usage for improved accessibility.
+
+### Fixed
+
+- Repeater component bug.
+- Move to parent folder button enable logic in file manager.
+- HTML decoding in TipTap HTML observer.
+- Menu link cache now properly flushed after page update.
+
+## 16.0.12 - 2025-11-24
+
+### Added
+
+- Ability to configure the sidebar label and group of each module.
+
+## 16.0.6 - 2025-11-12
+
+### Added
+
+- Search functionality added to admin pages tree.
+- TipTap editor: source code button to view/edit HTML source.
+- TipTap editor: iframe embed support.
+- Search the pages tree.
+
+## 16.0.0 - 2025-11-02
+
+### Changed
+
+- Spatie/Translatable replaced by TypiCMS\translatable
+- Validation rules specified as arrays
+
 ## 15.0.11 - 2025-10-08
 
 ### Changed

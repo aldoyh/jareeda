@@ -19,6 +19,12 @@
 /storage/*.key
 /storage/pail
 /vendor
+_ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+/.ai/mcp/mcp.json
+/.claude/settings.local.json
+/.claude/skills
+.mcp.json
+boost.json

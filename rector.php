@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
+use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\Config\RectorConfig;
+use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
 use RectorLaravel\Set\LaravelSetList;
 use RectorLaravel\Set\LaravelSetProvider;
 
@@ -20,25 +22,29 @@ return RectorConfig::configure()
         LaravelSetList::LARAVEL_LEGACY_FACTORIES_TO_CLASSES,
     ])
     ->withComposerBased(laravel: true)
-    ->withCache(
-        cacheDirectory: '/tmp/rector',
-        cacheClass: FileCacheStorage::class,
-    )
+    ->withImportNames()
+    ->withCache(cacheDirectory: '/tmp/rector', cacheClass: FileCacheStorage::class)
     ->withPaths([
-        __DIR__ . '/app',
-        __DIR__ . '/bootstrap/app.php',
-        __DIR__ . '/config',
-        __DIR__ . '/database',
-        __DIR__ . '/public',
-        __DIR__ . '/routes',
-        __DIR__ . '/Modules',
+        __DIR__.'/app',
+        __DIR__.'/bootstrap/app.php',
+        __DIR__.'/config',
+        __DIR__.'/database',
+        __DIR__.'/public',
+        __DIR__.'/routes',
+        __DIR__.'/Modules',
     ])
     ->withPreparedSets(
         deadCode: true,
         codeQuality: true,
+        codingStyle: true,
         typeDeclarations: true,
         privatization: true,
         earlyReturn: true,
-        strictBooleans: true,
     )
-    ->withPhpSets();
+    ->withRules([
+        DeclareStrictTypesRector::class,
+    ])
+    ->withPhpSets()
+    ->withSkip([
+        EncapsedStringsToSprintfRector::class,
+    ]);
