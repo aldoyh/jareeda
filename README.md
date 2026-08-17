@@ -11,11 +11,13 @@ Jareeda is a bilingual (`en` / `ar`) news CMS built on [TypiCMS](https://typicms
 | Vue | 3.5 |
 
 Latest upgrade notes and screenshots: [docs/upgrade-2026.md](docs/upgrade-2026.md).  
-Architecture decision: [docs/decisions/ADR-001-laravel-13-typicms-17.md](docs/decisions/ADR-001-laravel-13-typicms-17.md).
+Architecture decision: [docs/decisions/ADR-001-laravel-13-typicms-17.md](docs/decisions/ADR-001-laravel-13-typicms-17.md).  
+News pipeline (fetch, images, caching): [docs/NEWS_PIPELINE.md](docs/NEWS_PIPELINE.md) · [docs/NEWSAPI.md](docs/NEWSAPI.md).
 
-![English home](docs/screenshots/en-home-desktop.png)
-
-![Arabic home](docs/screenshots/ar-home-desktop.png)
+| Light | Dark |
+| --- | --- |
+| ![English home, light theme](docs/screenshots/home-en-light.webp) | ![English home, dark theme](docs/screenshots/home-en-dark.webp) |
+| ![Arabic home, light theme, RTL](docs/screenshots/home-ar-rtl-light.webp) | ![Arabic home, dark theme, RTL](docs/screenshots/home-ar-rtl-dark.webp) |
 
 ## Table of contents
 
@@ -213,7 +215,9 @@ Events have starting and ending dates.
 
 ### News
 
-News module.
+Beyond the standard TypiCMS News module, Jareeda adds a full aggregation pipeline: scheduled fetches from NewsAPI.ai, NewsData.io, and Bahrain RSS feeds, article deduplication, and a multi-tier image fallback (source scraping → AI generation → SVG placeholder). See [docs/NEWS_PIPELINE.md](docs/NEWS_PIPELINE.md) for commands, caching strategy, and known gotchas.
+
+The public homepage also ships a dark-mode toggle (`localStorage`-persisted, respects `prefers-color-scheme`) and full Arabic RTL layout — see the screenshots above.
 
 ### Contacts
 

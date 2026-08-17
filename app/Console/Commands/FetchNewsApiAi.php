@@ -36,7 +36,7 @@ class FetchNewsApiAi extends Command
      */
     public function handle(): int
     {
-        $apiKey = env('NEWSAPI_KEY');
+        $apiKey = config('services.newsapi.key');
 
         if (empty($apiKey)) {
             $this->error('NEWSAPI_KEY not set in .env');

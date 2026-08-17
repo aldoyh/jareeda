@@ -384,7 +384,7 @@ body-ar .newspaper,
 
         .page-item {
             .page-link {
-                font-family: $font-family-serif;
+                font-family: $newspaper-headline-font;
                 font-weight: 700;
                 font-size: 0.875rem;
                 min-width: 2.5rem;
@@ -422,7 +422,7 @@ body-ar .newspaper,
     // RTL pagination
     [dir="rtl"] & .pagination {
         .page-item .page-link {
-            font-family: $font-family-arabic;
+            font-family: $newspaper-arabic-headline-font;
         }
     }
 }

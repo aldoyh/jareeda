@@ -106,11 +106,4 @@ function createToggleButton(): void {
     }
 }
 
-// Initialize on DOM ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initDarkMode);
-} else {
-    initDarkMode();
-}
-
 export { initDarkMode, setTheme, getStoredTheme };
