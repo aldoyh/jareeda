@@ -12,6 +12,49 @@
 
         $allNews = $newsQuery->clone()->paginate($perPage);
         $featuredArticle = $currentPage === 1 ? $newsQuery->clone()->first() : null;
+        $categoryMap = [
+            'news' => ['label' => $isArabic ? 'أخبار' : 'News', 'icon' => 'icon-newspaper'],
+            'bahrain' => ['label' => $isArabic ? 'البحرين' : 'Bahrain', 'icon' => 'icon-map-pin'],
+            'local' => ['label' => $isArabic ? 'محلي' : 'Local', 'icon' => 'icon-house'],
+            'world' => ['label' => $isArabic ? 'العالم' : 'World', 'icon' => 'icon-globe'],
+            'business' => ['label' => $isArabic ? 'أعمال' : 'Business', 'icon' => 'icon-arrow-up'],
+            'economy' => ['label' => $isArabic ? 'اقتصاد' : 'Economy', 'icon' => 'icon-grid-2x2'],
+            'sports' => ['label' => $isArabic ? 'رياضة' : 'Sports', 'icon' => 'icon-users'],
+            'culture' => ['label' => $isArabic ? 'ثقافة' : 'Culture', 'icon' => 'icon-image'],
+            'opinion' => ['label' => $isArabic ? 'رأي' : 'Opinion', 'icon' => 'icon-pencil'],
+            'tech' => ['label' => $isArabic ? 'تقنية' : 'Tech', 'icon' => 'icon-settings'],
+            'technology' => ['label' => $isArabic ? 'تقنية' : 'Technology', 'icon' => 'icon-settings'],
+            'education' => ['label' => $isArabic ? 'تعليم' : 'Education', 'icon' => 'icon-text-select'],
+            'health' => ['label' => $isArabic ? 'صحة' : 'Health', 'icon' => 'icon-shield-user'],
+            'lifestyle' => ['label' => $isArabic ? 'نمط حياة' : 'Lifestyle', 'icon' => 'icon-circle-user-round'],
+        ];
+
+        $categoryCounts = $newsQuery->clone()
+            ->selectRaw('TRIM(category) as category_name, COUNT(*) as total')
+            ->whereNotNull('category')
+            ->whereRaw("TRIM(category) <> ''")
+            ->groupByRaw('TRIM(category)')
+            ->orderByDesc('total')
+            ->limit(12)
+            ->get()
+            ->map(function ($item) use ($categoryMap, $isArabic) {
+                $key = \Illuminate\Support\Str::of((string) $item->category_name)->lower()->trim()->slug('_')->replace('_', '')->value();
+                $meta = $categoryMap[$key] ?? [
+                    'label' => (string) $item->category_name,
+                    'icon' => 'icon-tag',
+                ];
+
+                return [
+                    'key' => $key,
+                    'label' => $meta['label'],
+                    'icon' => $meta['icon'],
+                    'total' => (int) $item->total,
+                    'raw' => (string) $item->category_name,
+                    'slug' => \Illuminate\Support\Str::of((string) $item->category_name)->slug(),
+                    'aria' => $isArabic ? 'تصنيف ' . $meta['label'] : $meta['label'] . ' category',
+                ];
+            })
+            ->values();
     @endphp
 
     {{-- SEO Structured Data (JSON-LD) --}}
@@ -103,7 +146,6 @@
         </div>
     </div>
 
-    {{-- Newspaper Layout: Latest Bahrain News --}}
     @if($allNews->count() > 0)
         {{-- Set dir="rtl" on html for Arabic --}}
         @push('js')
@@ -112,7 +154,43 @@
             @endif
         @endpush
 
-        <section class="newspaper-section" aria-label="{{ __('Latest news') }}">
+        @if($currentPage === 1 && $categoryCounts->isNotEmpty())
+            <section class="category-rail" aria-label="{{ $isArabic ? 'الفئات' : 'Categories' }}">
+                <div class="container-xl">
+                    <div class="category-rail__shell">
+                        <div class="category-rail__head">
+                            <div>
+                                <p class="category-rail__eyebrow">{{ $isArabic ? 'الفئات' : 'Categories' }}</p>
+                                <h2 class="category-rail__title">{{ $isArabic ? 'تصفح المواضيع بسرعة' : 'Browse topics at a glance' }}</h2>
+                            </div>
+                            <p class="category-rail__summary">
+                                {{ $categoryCounts->count() }} {{ $isArabic ? 'فئات نشطة' : 'active categories' }}
+                            </p>
+                        </div>
+
+                        <div class="category-rail__track" role="list" aria-label="{{ $isArabic ? 'قائمة الفئات' : 'Category list' }}">
+                            @foreach($categoryCounts as $category)
+                                <div
+                                    class="category-rail__item"
+                                    role="listitem"
+                                    aria-label="{{ $category['aria'] }}"
+                                >
+                                    <span class="category-rail__icon" aria-hidden="true">
+                                        <i class="{{ $category['icon'] }}"></i>
+                                    </span>
+                                    <span class="category-rail__body">
+                                        <span class="category-rail__label">{{ $category['label'] }}</span>
+                                        <span class="category-rail__count">{{ $category['total'] }}</span>
+                                    </span>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </section>
+        @endif
+
+        <section class="newspaper-section" id="latest-news" aria-label="{{ __('Latest news') }}">
             <div class="container-xl">
                 {{-- Masthead --}}
                 <div class="newspaper-masthead">

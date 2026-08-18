@@ -1,6 +1,235 @@
 // Newspaper-style layout for Jareeda
 // Multi-column layout with justified text for English and Arabic
 
+// Category rail
+.category-rail {
+    position: relative;
+    padding: 2rem 0 1rem;
+    overflow: clip;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at top left, rgba($primary, 0.18), transparent 34%),
+            radial-gradient(circle at 85% 15%, rgba($warning, 0.16), transparent 28%),
+            linear-gradient(180deg, rgba($gray-100, 0.95), rgba($white, 1));
+        pointer-events: none;
+    }
+
+    &__shell {
+        position: relative;
+        display: grid;
+        gap: 1.25rem;
+        padding: 1.5rem;
+        border: 1px solid rgba($gray-300, 0.9);
+        border-radius: $border-radius-lg * 1.15;
+        background: rgba($white, 0.88);
+        box-shadow: 0 20px 60px rgba($gray-900, 0.08);
+        backdrop-filter: blur(18px);
+    }
+
+    &__head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    &__eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: fit-content;
+        color: $primary;
+        font-size: $font-size-base * 0.8125;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+
+        &::before {
+            content: '';
+            width: 2.5rem;
+            height: 1px;
+            background: currentColor;
+            opacity: 0.45;
+        }
+    }
+
+    &__title {
+        font-family: 'Playfair Display', 'Georgia', serif;
+        font-size: clamp(1.75rem, 3vw, 2.85rem);
+        line-height: 1.02;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        max-width: 14ch;
+        margin: 0;
+    }
+
+    &__summary {
+        color: $gray-700;
+        font-size: $font-size-base * 0.875;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    &__track {
+        display: flex;
+        gap: 0.85rem;
+        overflow-x: auto;
+        padding-bottom: 0.35rem;
+        scroll-snap-type: x proximity;
+        scrollbar-width: thin;
+        scrollbar-color: rgba($gray-500, 0.55) transparent;
+
+        &::-webkit-scrollbar {
+            height: 0.45rem;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgba($gray-500, 0.4);
+            border-radius: 999px;
+        }
+    }
+
+    &__item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.85rem;
+        min-width: 11rem;
+        flex: 0 0 auto;
+        padding: 0.9rem 1rem;
+        border: 1px solid rgba($gray-300, 0.95);
+        border-radius: $border-radius-lg;
+        background: linear-gradient(180deg, rgba($white, 0.95), rgba($gray-100, 0.98));
+        color: $gray-900;
+        scroll-snap-align: start;
+        transition:
+            transform 0.18s ease,
+            border-color 0.18s ease,
+            box-shadow 0.18s ease;
+        box-shadow: 0 12px 28px rgba($gray-900, 0.06);
+
+        &:hover {
+            transform: translateY(-2px);
+            border-color: rgba($primary, 0.45);
+            box-shadow: 0 16px 34px rgba($gray-900, 0.1);
+        }
+
+        &:focus-visible {
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba($primary, 0.22), 0 16px 34px rgba($gray-900, 0.1);
+        }
+    }
+
+    &__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.8rem;
+        height: 2.8rem;
+        border-radius: 999px;
+        background: $gray-900;
+        color: $white;
+        flex: 0 0 auto;
+
+        i {
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+    }
+
+    &__body {
+        min-width: 0;
+        display: grid;
+        gap: 0.15rem;
+    }
+
+    &__label {
+        color: $gray-900;
+        font-size: $font-size-base * 0.9375;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        overflow-wrap: anywhere;
+    }
+
+    &__count {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        border-radius: $border-radius-pill;
+        padding: 0.2rem 0.55rem;
+        background: rgba($primary, 0.12);
+        color: $primary-700;
+        font-size: $font-size-base * 0.75;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+    }
+
+    &__text {
+        color: $gray-700;
+        font-size: $font-size-base * 1.0625;
+        margin: 0;
+    }
+}
+
+[dir='rtl'] .category-rail__title,
+[lang='ar'] .category-rail__title,
+.body-ar .category-rail__title {
+    font-family: 'Noto Naskh Arabic', 'Amiri', serif;
+    max-width: none;
+    line-height: 1.2;
+}
+
+[dir='rtl'] .category-rail__eyebrow,
+[lang='ar'] .category-rail__eyebrow,
+.body-ar .category-rail__eyebrow,
+[dir='rtl'] .category-rail__summary,
+[lang='ar'] .category-rail__summary,
+.body-ar .category-rail__summary {
+    text-align: start;
+}
+
+[dir='rtl'] .newspaper-article__title,
+[lang='ar'] .newspaper-article__title,
+.body-ar .newspaper-article__title,
+[dir='rtl'] .recent-article-card__title,
+[lang='ar'] .recent-article-card__title,
+.body-ar .recent-article-card__title,
+[dir='rtl'] .recent-article-card__fallback-title,
+[lang='ar'] .recent-article-card__fallback-title,
+.body-ar .recent-article-card__fallback-title {
+    font-family: 'Noto Naskh Arabic', 'Amiri', serif;
+}
+
+@include media-breakpoint-down(lg) {
+    .category-rail {
+        &__title {
+            max-width: none;
+        }
+    }
+}
+
+@include media-breakpoint-down(md) {
+    .category-rail {
+        padding-top: 1rem;
+
+        &__shell {
+            padding: 1rem;
+        }
+
+        &__head {
+            align-items: start;
+        }
+
+        &__item {
+            min-width: 10rem;
+        }
+    }
+}
+
 // Newspaper layout variables
 $newspaper-column-gap: 2em;
 $newspaper-column-rule: 1px solid var(--bs-gray-300);

@@ -9,19 +9,21 @@ import Alert from 'bootstrap/js/dist/alert';
  * Swiper
  */
 import Swiper from 'swiper';
-import { Autoplay, EffectFade, Navigation, Pagination, Parallax } from 'swiper/modules';
+import { A11y, Autoplay, EffectCards, EffectFade, Navigation, Pagination, Parallax } from 'swiper/modules';
 
-Swiper.use([Navigation, Pagination, Autoplay, Parallax, EffectFade]);
+Swiper.use([Navigation, Pagination, Autoplay, Parallax, EffectFade, EffectCards, A11y]);
 window.Swiper = Swiper;
 
 import enableAnchorTop from './public/anchor-top.ts';
 import enableNavigation from './public/navigation.ts';
+import enableRecentArticlesCarousel from './public/recent-articles-carousel.ts';
 import enablePhotoSwipeLightbox from './public/photo-swipe-lightbox.ts';
 import { initDarkMode } from './public/dark-mode.ts';
 
 enablePhotoSwipeLightbox();
 enableAnchorTop();
 enableNavigation();
+enableRecentArticlesCarousel();
 initDarkMode();
 
 import.meta.glob(['../images/**']);

@@ -14,7 +14,7 @@
 @import 'swiper/css/effect-fade';
 // @import 'swiper/css/effect-flip';
 // @import 'swiper/css/effect-creative';
-// @import 'swiper/css/effect-cards';
+@import 'swiper/css/effect-cards';
 
 // @import 'swiper/css/free-mode';
 // @import 'swiper/css/grid';
@@ -39,4 +39,12 @@
 }
 .swiper-slide {
     -webkit-transform: translate3d(0, 0, 0); // Safari
+}
+
+.swiper-pagination-bullet {
+    transition: transform 0.2s ease, opacity 0.2s ease;
+
+    &-active {
+        transform: scale(1.15);
+    }
 }
