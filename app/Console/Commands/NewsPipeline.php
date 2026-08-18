@@ -188,8 +188,8 @@ class NewsPipeline extends Command
                         continue;
                     }
 
-                    // Check for duplicates
-                    if (News::where('title', $title)->exists()) {
+                    // Check for duplicates by URL first, then by title
+                    if ($this->articleExists($link, $title)) {
                         continue;
                     }
 
@@ -252,7 +252,7 @@ class NewsPipeline extends Command
                         break;
                     }
 
-                    if (News::where('title', $article['title'])->exists()) {
+                    if ($this->articleExists($article['url'] ?? '', $article['title'])) {
                         continue;
                     }
 
@@ -313,7 +313,7 @@ class NewsPipeline extends Command
 
                 $title = $article['title'] ?? '';
 
-                if (empty($title) || News::where('title', $title)->exists()) {
+                if (empty($title) || $this->articleExists($article['url'] ?? '', $title)) {
                     continue;
                 }
 
@@ -397,7 +397,7 @@ class NewsPipeline extends Command
 
                     $title = $article['title'] ?? '';
 
-                    if (empty($title) || News::where('title', $title)->exists()) {
+                    if (empty($title) || $this->articleExists($article['link'] ?? '', $title)) {
                         continue;
                     }
 
@@ -433,24 +433,59 @@ class NewsPipeline extends Command
     }
 
     /**
-     * Remove duplicate articles.
+     * Check if article already exists by URL or title.
+     */
+    protected function articleExists(string $url, string $title): bool
+    {
+        if (!empty($url)) {
+            return News::where('url', $url)->exists();
+        }
+
+        return News::where('title', $title)->exists();
+    }
+
+    /**
+     * Remove duplicate articles by URL first, then by title.
      */
     protected function deduplicateArticles(): int
     {
-        $duplicates = News::query()
+        $deleted = 0;
+
+        // Remove duplicates by URL (keep most recent)
+        $urlDuplicates = News::query()
+            ->whereNotNull('url')
+            ->where('url', '!=', '')
+            ->select('url', News::raw('COUNT(*) as count'))
+            ->groupBy('url')
+            ->having('count', '>', 1)
+            ->get();
+
+        foreach ($urlDuplicates as $duplicate) {
+            $articles = News::where('url', $duplicate->url)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            $keep = $articles->first();
+            $toDelete = $articles->slice(1);
+
+            foreach ($toDelete as $article) {
+                $article->delete();
+                $deleted++;
+            }
+        }
+
+        // Remove duplicates by title (keep most recent)
+        $titleDuplicates = News::query()
             ->select('title', News::raw('COUNT(*) as count'))
             ->groupBy('title')
             ->having('count', '>', 1)
             ->get();
 
-        $deleted = 0;
-
-        foreach ($duplicates as $duplicate) {
+        foreach ($titleDuplicates as $duplicate) {
             $articles = News::where('title', $duplicate->title)
                 ->orderBy('created_at', 'desc')
                 ->get();
 
-            // Keep the first one (most recent), delete the rest
             $keep = $articles->first();
             $toDelete = $articles->slice(1);
 

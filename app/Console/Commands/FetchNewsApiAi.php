@@ -179,7 +179,7 @@ class FetchNewsApiAi extends Command
                 continue;
             }
 
-            if ($this->articleExists($article['url'])) {
+            if ($this->articleExists($article['url'], $article['title'])) {
                 $totalSkipped++;
 
                 continue;
@@ -239,9 +239,17 @@ class FetchNewsApiAi extends Command
     /**
      * Check if article already exists.
      */
-    protected function articleExists(string $url): bool
+    protected function articleExists(string $url, string $title = ''): bool
     {
-        return News::where('url', $url)->exists();
+        if (!empty($url)) {
+            return News::where('url', $url)->exists();
+        }
+
+        if (!empty($title)) {
+            return News::where('title', $title)->exists();
+        }
+
+        return false;
     }
 
     /**

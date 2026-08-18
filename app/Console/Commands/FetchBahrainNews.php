@@ -71,7 +71,7 @@ class FetchBahrainNews extends Command
                 $articles = $this->fetchFeed($url, $days, $limit - $totalFetched);
 
                 foreach ($articles as $article) {
-                    if ($this->articleExists($article['url'] ?? null)) {
+                    if ($this->articleExists($article['url'] ?? null, $article['title'] ?? null)) {
                         $totalSkipped++;
                         $this->line("  <comment>Skipped (duplicate): {$article['title']}</comment>");
 
@@ -350,15 +350,19 @@ class FetchBahrainNews extends Command
     }
 
     /**
-     * Check if article already exists.
+     * Check if article already exists by URL or title.
      */
-    protected function articleExists(?string $url): bool
+    protected function articleExists(?string $url, ?string $title = null): bool
     {
-        if (empty($url)) {
-            return false;
+        if (!empty($url)) {
+            return News::where('url', $url)->exists();
         }
 
-        return News::where('url', $url)->exists();
+        if (!empty($title)) {
+            return News::where('title', $title)->exists();
+        }
+
+        return false;
     }
 
     /**

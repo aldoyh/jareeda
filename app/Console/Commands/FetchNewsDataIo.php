@@ -208,7 +208,7 @@ class FetchNewsDataIo extends Command
                 continue;
             }
 
-            if ($this->articleExists($article['link'])) {
+            if ($this->articleExists($article['link'], $article['title'])) {
                 $totalSkipped++;
 
                 continue;
@@ -231,9 +231,17 @@ class FetchNewsDataIo extends Command
     /**
      * Check if article already exists.
      */
-    protected function articleExists(string $url): bool
+    protected function articleExists(string $url, string $title = ''): bool
     {
-        return News::where('url', $url)->exists();
+        if (!empty($url)) {
+            return News::where('url', $url)->exists();
+        }
+
+        if (!empty($title)) {
+            return News::where('title', $title)->exists();
+        }
+
+        return false;
     }
 
     /**

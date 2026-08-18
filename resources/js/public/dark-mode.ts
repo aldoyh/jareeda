@@ -62,9 +62,11 @@ function initDarkMode(): void {
     });
 }
 
+let toggleCreated = false;
+
 function createToggleButton(): void {
-    // Check if toggle already exists
-    if (document.querySelector('.dark-mode-toggle')) {
+    // Prevent duplicate toggle creation
+    if (toggleCreated || document.querySelector('.dark-mode-toggle')) {
         return;
     }
 
@@ -104,6 +106,8 @@ function createToggleButton(): void {
     } else {
         header.appendChild(toggle);
     }
+
+    toggleCreated = true;
 }
 
 export { initDarkMode, setTheme, getStoredTheme };
