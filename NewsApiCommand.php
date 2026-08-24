@@ -53,9 +53,9 @@ $config = [
     'timeout' => 30,
     'retry_count' => 3,
     'verbose' => isset($options['verbose']),
-    'cache_dir' => __DIR__ . '/../data/cache',
+    'cache_dir' => __DIR__ . '/data/cache',
     'cache_ttl' => 3600, // 1 hour
-    'data_dir' => __DIR__ . '/../data',
+    'data_dir' => __DIR__ . '/data',
 ];
 
 // Ensure cache directory exists
@@ -192,7 +192,7 @@ function saveToCache($search_term, $data)
     global $config;
     if ($config['use_cache']) {
         $cache_file = getCacheFile($search_term);
-        file_put_contents($cache_file, json_encode($data, JSON_PRETTY_PRINT));
+        file_put_contents($cache_file, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
         log_msg("✓ Cache saved: $cache_file", true);
     }
 }

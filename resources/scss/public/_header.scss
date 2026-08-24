@@ -30,3 +30,106 @@
         }
     }
 }
+
+// Newspaper masthead header (replaces stock header on homepage)
+.newspaper-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    gap: 1rem;
+    width: 100%;
+
+    &__left,
+    &__right {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__right {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    &__center {
+        flex: 0 0 auto;
+        text-align: center;
+    }
+
+    &__title {
+        font-family: 'Playfair Display', 'Georgia', serif;
+        font-size: clamp(1.5rem, 3vw, 2.5rem);
+        font-weight: 900;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        margin-bottom: 0;
+        line-height: 1.1;
+        color: $gray-900;
+    }
+
+    &__tagline {
+        font-family: 'Inter', -apple-system, sans-serif;
+        font-size: $font-size-base * 0.75;
+        color: $gray-500;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        margin: 0;
+    }
+
+    &__date {
+        font-family: 'Inter', -apple-system, sans-serif;
+        font-size: $font-size-base * 0.8125;
+        color: $gray-600;
+    }
+
+    &__nav {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+}
+
+// Arabic newspaper header
+[dir='rtl'] .newspaper-header__title,
+[lang='ar'] .newspaper-header__title,
+.body-ar .newspaper-header__title {
+    font-family: 'Noto Naskh Arabic', 'Amiri', serif;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+[dir='rtl'] .newspaper-header__tagline,
+[lang='ar'] .newspaper-header__tagline,
+.body-ar .newspaper-header__tagline {
+    letter-spacing: 0;
+}
+
+@include media-breakpoint-down(md) {
+    .newspaper-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.25rem;
+
+        &__left,
+        &__right {
+            flex: none;
+        }
+
+        &__title {
+            font-size: 1.5rem;
+        }
+    }
+}
+
+// Hide hamburger menu on newspaper homepage
+.body-newspaper .header-offcanvas .hamburger,
+.body-newspaper .header-offcanvas .navigation {
+    display: none;
+}
+
+// Make header non-sticky on newspaper homepage
+.body-newspaper .header {
+    position: relative;
+    border-bottom: 3px double $gray-900;
+    box-shadow: none;
+}

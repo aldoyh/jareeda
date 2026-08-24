@@ -1,4 +1,4 @@
-<x-core::layouts.page :$page>
+<x-core::layouts.page :$page bodyClass="body-newspaper">
     @php
         $locale = app()->getLocale();
         $isArabic = $locale === 'ar';
@@ -137,7 +137,34 @@
     <script type="application/ld+json">{!! json_encode($itemListSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
 
     <x-slot:header-title>
-        <h1 class="header-title"><x-core::header-title /></h1>
+        <div class="newspaper-header">
+            <div class="newspaper-header__left">
+                <time class="newspaper-header__date" datetime="{{ now()->format('Y-m-d') }}">
+                    @if($isArabic)
+                        {{ now()->locale('ar')->translatedFormat('l، j F Y') }}
+                    @else
+                        {{ now()->format('l, F j, Y') }}
+                    @endif
+                </time>
+            </div>
+            <div class="newspaper-header__center">
+                <h1 class="newspaper-header__title">
+                    @if($isArabic)
+                        جريدة
+                    @else
+                        {{ config('app.name', 'Jareeda') }}
+                    @endif
+                </h1>
+                <p class="newspaper-header__tagline">
+                    {{ $isArabic ? 'أخبار البحرين' : __('Bahrain News') }}
+                </p>
+            </div>
+            <div class="newspaper-header__right">
+                <div class="newspaper-header__nav">
+                    <x-core::lang-switcher :$page />
+                </div>
+            </div>
+        </div>
     </x-slot:header-title>
 
     <div class="page-body">
