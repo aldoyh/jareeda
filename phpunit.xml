@@ -4,6 +4,10 @@
          bootstrap="vendor/autoload.php"
          colors="true"
 >
+    <!-- Jareeda: no Unit/Feature tests — core is Playwright e2e (tests/e2e/screenshot-report.spec.ts).
+         php artisan test requires pestphp/pest + phpunit/phpunit (not installed; composer.json has no phpunit).
+         Keeping empty suites would make `php artisan test` fail via nunomaduro/collision expecting SebastianBergmann\Environment.
+         Until Pest is added, run `npm run test:e2e` instead. -->
     <testsuites>
         <testsuite name="Unit">
             <directory>tests/Unit</directory>

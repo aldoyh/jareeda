@@ -97,11 +97,12 @@ Public pages were 500 immediately after the Composer bump. These TypiCMS 17 appl
 
 ## Known follow-ups (not blocking this upgrade)
 
-- **Document direction.** `html` has `lang="ar"` but no `dir="rtl"`. TypiCMS 17 layouts also omit `dir`. Arabic copy is correct; chrome stays LTR. A published public/auth layout should set `dir` from locale.
-- **Login JS.** `/en/login` and `/ar/login` log `Cannot read properties of undefined (reading 'locale')` and `alertify is not defined`. Login is on the `public` middleware group, which does not run `JavaScriptData`.
+- **Document direction — FIXED.** `html[dir]` now set via `home.blade.php:174` (`document.documentElement.setAttribute('dir','rtl')` for `ar`). Verified in Playwright `desktop-rtl` project (`playwright.config.ts:22`).
+- **Login JS.** `/en/login` and `/ar/login` log `Cannot read properties of undefined (reading 'locale')` and `alertify is not defined`. Login is on the `public` middleware group, which does not run `JavaScriptData`. Still open — not a news-pipeline blocker.
 - **Passkey string.** Arabic login still shows one English passkey sentence.
-- **Swiper.** Left on 12.2.0; 14.1.0 is a separate breaking change.
-- **No automated tests.** There is no `tests/` directory. Verification is artisan, HTTP, Playwright screenshots, and `pnpm build`.
+- **Swiper.** Left on 12.2.0; 14.1.0 is a separate breaking change (major API).
+- **Automated tests — UPDATED.** `tests/e2e/screenshot-report.spec.ts:15` is now core (Playwright 3 projects: desktop-chrome/desktop-rtl/mobile-chrome, 5 pages). `tests/Unit`/`tests/Feature` remain empty — `phpunit.xml:7` suites have no files; `php artisan test` requires `pestphp/pest` (not installed). Core verification is `npm run test:e2e` + `vendor/bin/pint --dirty` + `php artisan about`.
+- **Deprecated image commands.** `news:generate-images` / `news:process-images` / `news:ensure-images` (DiffusionBee) are legacy; core is `news:pipeline` + `news:fetch-*` + `news:fetch-missing-images` + `news:generate-placeholders`/`unsloth-images` (see `docs/NEWS_PIPELINE.md` core vs deprecated table).
 
 ## Commands
 

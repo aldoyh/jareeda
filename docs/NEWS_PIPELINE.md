@@ -49,61 +49,84 @@ If `bootstrap/cache/config.php` exists (created by `php artisan config:cache`), 
 
 If a fetch command reports a key as "not set" despite it being present in `.env`, run `php artisan config:clear` first before assuming the key itself is wrong.
 
-## Commands
+## Commands — Core vs Deprecated
 
-### Fetching Articles
+> Core = used in production / `news:pipeline`. Deprecated = kept for BC, will be removed (see README Artisan table).
+
+### Core — Fetching Articles
 
 ```bash
-# Fetch from NewsAPI.ai (Event Registry) - cached 12 hours
-php artisan news:fetch-newsapi --days=7 --limit=100
+# Orchestrator (fetch all 3 families + dedup + optional images)
+php artisan news:pipeline --days=7 --limit=500 --images --unsloth
 
-# Fetch from NewsData.io - cached 1 hour
-php artisan news:fetch-newsdata --search=bahrain --limit=100 --pages=10
+# Fetch from NewsAPI.ai (Event Registry) - 12h cache newsapi_bahrain_*
+php artisan news:fetch-newsapi --days=7 --limit=100 --language=en,ar --force
 
-# Fetch from RSS feeds (11 sources)
+# Fetch from NewsData.io - 1h cache, paginated
+php artisan news:fetch-newsdata --days=7 --limit=100 --pages=10
+
+# Fetch from RSS feeds (8 sources)
 php artisan news:fetch-bahrain --days=7 --limit=100
 
-# Scrape full article content with Playwright
+# Scrape full article content with Playwright (optional)
 php artisan news:scrape-content --limit=50
 ```
 
-### Image Generation
+### Core — Image Generation (preferred, explicit)
 
 ```bash
-# Fetch missing images from article URLs
+# 1) Try to scrape real og:image from article URLs
 php artisan news:fetch-missing-images --limit=50
 
-# Generate SVG placeholders for articles without images
+# 2) Generate AI images via Unsloth FLUX2 (requires localhost:8888)
+php artisan news:generate-unsloth-images --limit=10 --force
+
+# 3) Fallback SVG placeholders (deterministic, RTL-aware)
 php artisan news:generate-placeholders --limit=50
-
-# Generate AI images using Unsloth FLUX2
-php artisan news:generate-unsloth-images --limit=10
-
-# Ensure all articles have images (auto-fallback)
-php artisan news:ensure-images
 ```
 
-### E2E Testing
+### Deprecated / legacy — do not use for new automation
 
 ```bash
-# Take screenshots of all pages
-npx tsx scripts/take-screenshots.ts
-
-# View E2E report
-open tests/e2e/report/index.html
+# Legacy wrapper DiffusionBee -> SVG (macOS only, /Applications/DiffusionBee.app)
+php artisan news:ensure-images --limit=50 --diffusionbee
+php artisan news:generate-images --limit=20   # DiffusionBee only
+php artisan news:process-images --limit=20    # thin NewsImageService wrapper, duplicates fetch-missing-images
 ```
 
-## Data Sources
+### E2E Testing — Core
 
-| Source | Type | Articles | Notes |
-|--------|------|----------|-------|
-| **NewsAPI.ai** | REST API | ~100 | Event Registry, requires API key |
-| **NewsData.io** | REST API | ~95 | Free tier, pub API key |
-| **Biz Bahrain** | RSS | ~10 | Bahrain-specific business news |
-| **Bahrain This Week** | RSS | ~10 | Weekly Bahrain news |
-| **Google News** | RSS | ~30 | EN + AR Bahrain search |
-| **BBC Middle East** | RSS | ~10 | General Middle East news |
-| **Al Jazeera** | RSS | ~10 | General Middle East news |
+```bash
+# Run Playwright across 3 viewports (desktop-chrome, desktop-rtl, mobile)
+npm run test:e2e
+# or npx playwright test tests/e2e/screenshot-report.spec.ts --project=desktop-chrome
+
+# Rebuild report from existing screenshots without browser
+npm run test:e2e:report
+open tests/e2e/report/index.html
+
+# Legacy wrappers (use npm run test:e2e instead):
+# npx tsx scripts/take-screenshots.ts
+# npx tsx scripts/capture-screenshots.ts
+# npx tsx scripts/check-images.ts
+```
+
+## Data Sources — Canonical (8 RSS + 2 APIs)
+
+`NewsPipeline.php:144` defines the 8 RSS feeds; API sources are NewsAPI.ai + NewsData.io.
+
+| Source | Type | Identifier in code | Notes |
+|--------|------|---------------------|-------|
+| **NewsAPI.ai** | REST API | `news:fetch-newsapi` | Event Registry, `config/services.php: newsapi`, 12h cache `newsapi_bahrain_*` |
+| **NewsData.io** | REST API | `news:fetch-newsdata` | `NEWSDATA_API_KEY` env, paginated |
+| **Google News EN** | RSS | `google-news-bahrain` | `https://news.google.com/rss/search?q=Bahrain+when:7d&hl=en` |
+| **Google News AR** | RSS | `google-news-bahrain-ar` | `…?q=%D8%A8%D8%AD%D8%B1%D9%8A%D9%86+when:7d&hl=ar` |
+| **BBC Middle East** | RSS | `bbc-mideast` | `feeds.bbci.co.uk/.../middle_east/rss.xml` |
+| **Gulf News Bahrain** | RSS | `gulf-news-bahrain` | `gulfnews.com/rss/bahrain` |
+| **Khaleej Times Bahrain** | RSS | `khaleej-times-bahrain` | `khaleejtimes.com/rss/bahrain` |
+| **Bahrain Mirror** | RSS | `bahrain-mirror` | `bahrainmirror.com/rss.xml` |
+| **Al-Ayam** | RSS | `alayam` | `feeds.feedburner.com/alayam` |
+| **Al Jazeera** | RSS | `aljazeera-bahrain` | `aljazeera.com/xml/rss/all.xml` |
 
 ## Image Pipeline
 
@@ -142,29 +165,33 @@ php artisan news:fetch-missing-images
 | RSS Feeds | No cache | Direct fetch |
 | Image URLs | Permanent | Database `image` column |
 
-## Database Schema
+## Database Schema — Actual
 
 ```sql
--- typicms_news table (managed by TypiCMS)
-CREATE TABLE typicms_news (
+-- news table (app custom, not typicms_news) — database/migrations/2026_08_14_000001_create_news_table.php:14
+CREATE TABLE news (
     id INTEGER PRIMARY KEY,
-    slug TEXT UNIQUE NOT NULL,
-    title TEXT NOT NULL,          -- JSON: {en: "...", ar: "..."}
-    body TEXT,                    -- JSON: {en: "...", ar: "..."}
-    excerpt TEXT,                 -- JSON: {en: "...", ar: "..."}
-    url TEXT,                     -- Source article URL
-    source TEXT,                  -- Source name (RSS feed, API)
-    author TEXT,
-    image TEXT,                   -- Image URL or path
-    image_alt TEXT,
-    ai_generated_image BOOLEAN,
-    ai_generated_image_path TEXT,
-    category TEXT,
-    language TEXT,                -- "en" or "ar"
-    published_at TIMESTAMP,
+    slug VARCHAR UNIQUE NOT NULL,
+    title JSON NOT NULL,          -- {en: "...", ar: "..."} stored as JSON, casts array
+    body JSON,                    -- {en: "...", ar: "..."} nullable
+    excerpt JSON,                 -- {en: "...", ar: "..."} nullable
+    url VARCHAR,                  -- source article URL
+    source VARCHAR,
+    author VARCHAR,
+    image VARCHAR,                -- URL or /storage/news/... / placeholder SVG
+    image_alt VARCHAR,
+    ai_generated_image BOOLEAN DEFAULT 0,
+    ai_generated_image_path VARCHAR,
+    category VARCHAR,
+    language VARCHAR(2) DEFAULT 'en', -- en | ar (App\Models\News: forLanguage scope)
+    published_at DATETIME,        -- indexed
+    is_featured BOOLEAN DEFAULT 0, -- scopeFeatured()
     created_at TIMESTAMP,
-    updated_at TIMESTAMP
+    updated_at TIMESTAMP,
+    UNIQUE(slug), INDEX(published_at), INDEX(category), INDEX(language)
 );
+-- Note: app/Models/News.php:35 table='news', casts title/body/excerpt=>array
+-- TypiCMS news module is NOT installed (bootstrap/providers.php:22 commented) — this is a standalone model.
 ```
 
 ## SEO Structured Data
@@ -204,23 +231,36 @@ After any change under `resources/js` or `resources/scss`, run `bun run build` (
 - **`php artisan serve` can keep serving a stale Vite manifest hash after a rebuild.** If the built JS/CSS filename in the rendered HTML doesn't match `public/build/manifest.json`, run `php artisan optimize:clear` (not just `view:clear`) and, if that doesn't help, restart the `serve` process — it can hold worker state across requests.
 - **Duplicate module initialization can silently cancel itself out.** `dark-mode.ts` used to both self-initialize on import *and* get called explicitly from `resources/js/public.js`, registering its click listener twice — every click toggled the theme forward then immediately back, so the button appeared to do nothing with no console error. Modules that export an explicit init function (matching the other `resources/js/public/*.ts` helpers) should not also auto-run on import.
 
-## Files
+## Files — Core
 
-| File | Purpose |
-|------|---------|
-| `app/Console/Commands/FetchNewsApiAi.php` | NewsAPI.ai fetcher with caching |
-| `app/Console/Commands/FetchNewsDataIo.php` | NewsData.io fetcher with pagination |
-| `app/Console/Commands/FetchBahrainNews.php` | RSS feed aggregator |
-| `app/Console/Commands/ScrapeArticleContent.php` | Playwright scraper |
-| `app/Console/Commands/FetchMissingImages.php` | Image URL scraper |
-| `app/Console/Commands/GeneratePlaceholderImages.php` | SVG placeholder generator |
-| `app/Console/Commands/GenerateUnslothImages.php` | Unsloth FLUX2 image generator |
-| `app/Console/Commands/GenerateArticleImages.php` | Image pipeline orchestrator |
-| `app/Services/UnslothImageService.php` | Unsloth API client |
-| `app/Services/NewsImageService.php` | Image download/scrape service |
-| `app/Models/News.php` | News model with localized fields |
-| `resources/views/public/pages/home.blade.php` | Homepage template |
-| `resources/scss/public/_newspaper.scss` | Newspaper CSS layout |
-| `resources/scss/public/_fonts.scss` | Google Fonts imports |
-| `scripts/take-screenshots.ts` | E2E screenshot script |
-| `tests/e2e/report/index.html` | HTML report with screenshots |
+| File | Purpose | Core? |
+|------|---------|-------|
+| `app/Console/Commands/FetchNewsApiAi.php` | NewsAPI.ai fetcher (12h cache) | ✅ |
+| `app/Console/Commands/FetchNewsDataIo.php` | NewsData.io fetcher paginated | ✅ |
+| `app/Console/Commands/FetchBahrainNews.php` | RSS 8-feed aggregator | ✅ |
+| `app/Console/Commands/NewsPipeline.php` | **Orchestrator** fetch+dedupe+images | ✅ |
+| `app/Console/Commands/ScrapeArticleContent.php` | Playwright content scrape | ⚠️ |
+| `app/Console/Commands/FetchMissingImages.php` | og:image scraper | ✅ |
+| `app/Console/Commands/GeneratePlaceholderImages.php` | SVG placeholder | ✅ |
+| `app/Console/Commands/GenerateUnslothImages.php` | Unsloth FLUX2 | ✅ |
+| `app/Console/Commands/GenerateArticleImages.php` | Legacy DiffusionBee→SVG wrapper (`news:ensure-images`) | ❌ deprecated |
+| `app/Console/Commands/GenerateDiffusionBeeImages.php` | DiffusionBee only (`news:generate-images`) | ❌ deprecated |
+| `app/Console/Commands/ProcessArticleImages.php` | `NewsImageService` wrapper (`news:process-images`) | ❌ deprecated |
+| `app/Services/UnslothImageService.php` | Unsloth API client (`generate`, `isHealthy`, `ensureModelLoaded`) | ✅ |
+| `app/Services/NewsImageService.php` | Download→scrape→AI tiered fallback | ✅ |
+| `app/Models/News.php` | `table=news`, scopes `published/recent/forLanguage/featured` | ✅ |
+| `app/Jobs/GenerateArticleImage.php` | Queueable AI job (`ai-images` queue, redis) | ✅ |
+| `app/Events/ArticleImageGenerated.php` / `Failed` | Job events | ✅ |
+| `app/Http/Controllers/Admin/AiImageController.php` | `POST /admin/news/{id}/generate-image` etc | ✅ |
+| `routes/ai-image.php` | AI admin routes | ✅ |
+| `config/unsloth.php` | Endpoint/model/storage/queue config | ✅ |
+| `resources/views/public/pages/home.blade.php` | Newspaper homepage + 3× JSON-LD | ✅ |
+| `resources/scss/public/_newspaper.scss` | Masthead/featured/article grid | ✅ |
+| `resources/scss/public/_dark-mode.scss` + `resources/js/public/dark-mode.ts` | Dark mode | ✅ |
+| `resources/scss/public/_fonts.scss` | Playfair/Source Serif/Inter/Noto Naskh/Amiri | ✅ |
+| `tests/e2e/screenshot-report.spec.ts` | **Playwright core test** (5 pages × 3 viewports) | ✅ |
+| `tests/e2e/generate-report.ts` | Standalone report builder (`npm run test:e2e:report`) | ⚠️ helper |
+| `playwright.config.ts` | 3 projects: desktop-chrome/desktop-rtl/mobile-chrome | ✅ |
+| `scripts/diffusionbee_standalone.php` | DiffusionBee JSON backend | ❌ macOS-only |
+| `scripts/capture-screenshots.ts` / `take-screenshots.ts` / `check-images.ts` | Legacy capture wrappers | ❌ use `npm run test:e2e` |
+| `scripts/fix-images.php` / `generate-report.php` | Legacy helpers | ❌ |

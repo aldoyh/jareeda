@@ -167,12 +167,6 @@
         </div>
     </x-slot:header-title>
 
-    <div class="page-body">
-        <div class="page-body-container">
-            @include('public::pages._main-content', ['page' => $page])
-        </div>
-    </div>
-
     @if($allNews->count() > 0)
         {{-- Set dir="rtl" on html for Arabic --}}
         @push('js')
@@ -180,42 +174,6 @@
                 <script>document.documentElement.setAttribute('dir', 'rtl');</script>
             @endif
         @endpush
-
-        @if($currentPage === 1 && $categoryCounts->isNotEmpty())
-            <section class="category-rail" aria-label="{{ $isArabic ? 'الفئات' : 'Categories' }}">
-                <div class="container-xl">
-                    <div class="category-rail__shell">
-                        <div class="category-rail__head">
-                            <div>
-                                <p class="category-rail__eyebrow">{{ $isArabic ? 'الفئات' : 'Categories' }}</p>
-                                <h2 class="category-rail__title">{{ $isArabic ? 'تصفح المواضيع بسرعة' : 'Browse topics at a glance' }}</h2>
-                            </div>
-                            <p class="category-rail__summary">
-                                {{ $categoryCounts->count() }} {{ $isArabic ? 'فئات نشطة' : 'active categories' }}
-                            </p>
-                        </div>
-
-                        <div class="category-rail__track" role="list" aria-label="{{ $isArabic ? 'قائمة الفئات' : 'Category list' }}">
-                            @foreach($categoryCounts as $category)
-                                <div
-                                    class="category-rail__item"
-                                    role="listitem"
-                                    aria-label="{{ $category['aria'] }}"
-                                >
-                                    <span class="category-rail__icon" aria-hidden="true">
-                                        <i class="{{ $category['icon'] }}"></i>
-                                    </span>
-                                    <span class="category-rail__body">
-                                        <span class="category-rail__label">{{ $category['label'] }}</span>
-                                        <span class="category-rail__count">{{ $category['total'] }}</span>
-                                    </span>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </section>
-        @endif
 
         <section class="newspaper-section" id="latest-news" aria-label="{{ __('Latest news') }}">
             <div class="container-xl">
