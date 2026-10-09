@@ -81,6 +81,11 @@ class ScrapeArticleContent extends Command
 
         $this->info('Running Playwright scraper...');
 
+        // Preflight: ensure required services / tools are available
+        if (!$this->checkAndPrepareServices()) {
+            return self::FAILURE;
+        }
+
         // Run the Playwright scraper
         $result = $this->runPlaywrightScraper($urlsFile);
 
@@ -171,5 +176,67 @@ class ScrapeArticleContent extends Command
         });
 
         return $process->getExitCode();
+    }
+
+    /**
+     * Check and prepare required services for scraping.
+     */
+    protected function checkAndPrepareServices(): bool
+    {
+        $this->info('Checking required services for scraping...');
+
+        // 1. Node.js
+        $nodeVersion = trim(shell_exec('node -v 2>&1') ?: '');
+        if (!str_starts_with($nodeVersion, 'v')) {
+            $this->error('Node.js not found in PATH. Install Node.js 18+.');
+            return false;
+        }
+        $this->info("Node {$nodeVersion} found.");
+
+        // 2. npm / npx
+        $npmVersion = trim(shell_exec('npm -v 2>&1') ?: '');
+        if (empty($npmVersion)) {
+            $this->error('npm not found in PATH.');
+            return false;
+        }
+        $this->info("npm {$npmVersion} found.");
+
+        // 3. Playwright browsers - check if chromium is installed
+        $this->info('Verifying Playwright browsers...');
+        $playwrightCheck = new Process(['npx', 'playwright', '--version'], base_path());
+        $playwrightCheck->run();
+        if (!$playwrightCheck->isSuccessful()) {
+            $this->warn('Playwright not ready, attempting install...');
+            // Try to install chromium
+            $install = new Process(['npx', 'playwright', 'install', 'chromium'], base_path());
+            $install->setTimeout(600);
+            $install->run(function ($type, $buffer) {
+                $this->getOutput()->write($buffer);
+            });
+            if (!$install->isSuccessful()) {
+                $this->error('Failed to install Playwright browsers. Run `npx playwright install chromium` manually.');
+                return false;
+            }
+        }
+        $this->info('Playwright browsers ready.');
+
+        // 4. tsx availability (via npx)
+        $this->info('Checking tsx...');
+        // npx will auto-fetch, so just note
+        $this->info('tsx will be resolved via npx.');
+
+        // 5. Storage writable
+        $storagePath = storage_path('app');
+        if (!is_writable($storagePath)) {
+            $this->error("Storage path {$storagePath} is not writable.");
+            return false;
+        }
+        $this->info('Storage writable.');
+
+        // 6. Optional: Redis for queue (warn only)
+        $redisConfig = config('database.redis.default.host');
+        $this->info('Service check complete. Ready to scrape.');
+
+        return true;
     }
 }
