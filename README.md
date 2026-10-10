@@ -2,10 +2,13 @@
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Larastan](https://img.shields.io/badge/PHPStan-level%205-brightgreen.svg?style=flat-square)](https://github.com/nunomaduro/larastan)
+[![Laravel](https://img.shields.io/badge/Laravel-13.35.0-red.svg)]()
 
 TypiCMS is a modular multilingual content management system built with [Laravel](https://laravel.com). Out of the box you can manage pages, events, news, places, menus, translations, and more.
 
 ![TypiCMS screenshot](https://typicms.org/uploads/files/typicms-screenshot.png?2)
+
+![Jareeda homepage on Laravel 13](docs/screenshots/homepage-laravel13.png)
 
 ## Table of contents
 

@@ -158,8 +158,8 @@
 import Compressor from '@uppy/compressor';
 import Uppy from '@uppy/core';
 import '@uppy/core/css/style.min.css';
-import '@uppy/dashboard/css/style.min.css';
-import '@uppy/image-editor/css/style.min.css';
+import '@uppy/dashboard/dist/style.min.css';
+import '@uppy/image-editor/dist/style.min.css';
 import DropTarget from '@uppy/drop-target';
 import ImageEditor from '@uppy/image-editor';
 import ar from '@uppy/locales/lib/ar_SA';
@@ -168,7 +168,7 @@ import fr from '@uppy/locales/lib/fr_FR';
 import nl from '@uppy/locales/lib/nl_NL';
 import Dashboard from '@uppy/vue/dashboard';
 import XHRUpload from '@uppy/xhr-upload';
-import { ArrowLeftIcon, CloudUploadIcon, FileIcon, FileMusicIcon, FileVideo2Icon, FolderIcon, FolderPlusIcon, LayoutGridIcon, LayoutListIcon } from 'lucide-vue-next';
+import { ArrowLeftIcon, CloudUploadIcon, FileIcon, FileMusicIcon, FileVideo2Icon, FolderIcon, FolderPlusIcon, LayoutGridIcon, LayoutListIcon } from '@lucide/vue';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

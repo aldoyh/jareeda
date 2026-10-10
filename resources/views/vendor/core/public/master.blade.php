@@ -8,7 +8,7 @@
     <meta name="description" content="@yield('description')" />
     <meta name="keywords" content="@yield('keywords')" />
 
-    <meta property="og:site_name" content="{{ $websiteTitle }}" />
+    <meta property="og:site_name" content="{{ websiteTitle() }}" />
     <meta property="og:title" content="@yield('ogTitle')" />
     <meta property="og:description" content="@yield('description')" />
     <meta property="og:type" content="website" />

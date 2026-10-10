@@ -97,7 +97,7 @@
 
 <script setup>
 import alertify from 'alertify.js';
-import { ChevronDownIcon, ChevronRightIcon, CornerRightDownIcon, HouseIcon, LockIcon } from 'lucide-vue-next';
+import { ChevronDownIcon, ChevronRightIcon, CornerRightDownIcon, HouseIcon, LockIcon } from '@lucide/vue';
 import { SlVueTreeNext } from 'sl-vue-tree-next';
 import { computed, ref, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';

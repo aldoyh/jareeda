@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { CirclePlusIcon, MoveIcon } from 'lucide-vue-next';
+import { CirclePlusIcon, MoveIcon } from '@lucide/vue';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import draggable from 'vuedraggable';

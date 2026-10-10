@@ -1,6 +1,6 @@
 @extends('core::public.master')
 
-@section('title', $page->present()->metaTitle() . ' – ' . $websiteTitle)
+@section('title', $page->present()->metaTitle() . ' – ' . websiteTitle())
 @section('ogTitle', $page->present()->metaTitle())
 @section('description', $page->meta_description)
 @section('keywords', $page->meta_keywords)

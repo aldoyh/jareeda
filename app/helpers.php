@@ -80,7 +80,8 @@ if (! function_exists('enabledLocales')) {
     {
         $locales = [];
         foreach (locales() as $locale) {
-            if (config('typicms.'.$locale.'.status') || request('preview')) {
+            $status = config('typicms.'.$locale.'.status');
+            if ($status === null || $status || request('preview')) {
                 $locales[] = $locale;
             }
         }
@@ -92,7 +93,7 @@ if (! function_exists('enabledLocales')) {
 if (! function_exists('localeAndRegion')) {
     function localeAndRegion(?string $separator = null): ?string
     {
-        $locales = config('typicms.locales') + config('typicms.admin_locales');
+        $locales = config('typicms.locales', []) + (config('typicms.admin_locales') ?? []);
         $localeAndRegion = Arr::get($locales, app()->getLocale());
         if (! is_null($separator)) {
             return str_replace('_', $separator, $localeAndRegion);
